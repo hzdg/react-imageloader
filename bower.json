@@ -1,0 +1,24 @@
+{
+  "name": "react-loadercomponents",
+  "version": "0.0.0",
+  "authors": [
+    "Eric Eldredge <lettertwo@gmail.com>"
+  ],
+  "description": "React components for wrangling loading",
+  "main": "./standalone/react-components.js",
+  "keywords": [
+    "react-component",
+    "react",
+    "loader",
+    "component"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/hzdg/react-loadercomponents",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

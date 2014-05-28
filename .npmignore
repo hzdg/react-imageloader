@@ -1,0 +1,8 @@
+/node_modules/
+/gulpfile.*
+/test/
+/vendor/
+/bower.json
+/coffeelint.json
+/src/
+/standalone/

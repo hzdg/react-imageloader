@@ -1,0 +1,48 @@
+{
+  "name": "react-loadercomponents",
+  "version": "0.0.0",
+  "description": "React components for wrangling loading",
+  "main": "./lib/index.js",
+  "scripts": {
+    "prepublish": "gulp build",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hzdg/react-loadercomponents.git"
+  },
+  "keywords": [
+    "react-component",
+    "react",
+    "loader",
+    "component"
+  ],
+  "author": "Eric Eldredge <lettertwo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hzdg/react-loadercomponents/issues"
+  },
+  "homepage": "https://github.com/hzdg/react-loadercomponents",
+  "dependencies": {},
+  "devDependencies": {
+    "coffee-script": "^1.7.1",
+    "gulp-coffee": "^1.4.3",
+    "gulp-bump": "^0.1.8",
+    "gulp": "^3.6.2",
+    "browserify": "^4.1.6",
+    "gulp-browserify": "^0.5.0",
+    "browserify-shim": "^3.5.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-mocha": "^0.4.1",
+    "chalk": "^0.4.0",
+    "yargs": "^1.2.2",
+    "chai": "^1.9.1"
+  },
+  "peerDependencies": {
+    "queueup": "*",
+    "react": "*"
+  },
+  "browserify-shim": {
+    "react": "global:React"
+  }
+}
