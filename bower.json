@@ -17,8 +17,10 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+    "vendor",
+    "test"
+  ],
+  "devDependencies": {
+    "react": "~0.10.0"
+  }
 }

@@ -36,7 +36,11 @@
     "gulp-mocha": "^0.4.1",
     "chalk": "^0.4.0",
     "yargs": "^1.2.2",
-    "chai": "^1.9.1"
+    "gulp-connect": "^2.0.5",
+    "open": "0.0.5",
+    "sinon": "^1.10.0",
+    "chai": "^1.9.1",
+    "mocha": "^1.20.0"
   },
   "peerDependencies": {
     "queueup": "*",
