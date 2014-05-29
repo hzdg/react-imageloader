@@ -1,10 +1,12 @@
 gulp = require 'gulp'
-mocha = require 'gulp-mocha'
 chalk = require 'chalk'
 gbump = require 'gulp-bump'
 coffee = require 'gulp-coffee'
 browserify = require 'gulp-browserify'
 rename = require 'gulp-rename'
+connect = require 'gulp-connect'
+open = require 'open'
+path = require 'path'
 
 yargs = require 'yargs'
   .wrap 80
@@ -29,15 +31,24 @@ gulp.task 'build:node', ->
     .pipe gulp.dest './lib'
 
 
-gulp.task 'build:browser', ->
-  gulp.src './src/index.coffee'
-    .pipe coffee(bare: true).on 'error', (error) ->
-      log.error 'coffee', error
+gulp.task 'build:browser', ['build:node'], ->
+  gulp.src './lib/index.js'
     .pipe browserify
       standalone: 'ReactLoaderComponents'
       transform: ['browserify-shim']
     .pipe rename('react-loadercomponents.js')
     .pipe gulp.dest('./standalone/')
+    .pipe connect.reload()
+
+
+gulp.task 'build:tests', ->
+  gulp.src './test/**/*.?(lit)coffee'
+    .pipe coffee().on 'error', (error) ->
+      log.error 'coffee', error
+    .pipe browserify
+      transform: ['browserify-shim']
+    .pipe gulp.dest('./test/')
+    .pipe connect.reload()
 
 
 gulp.task 'build', ['build:node', 'build:browser']
@@ -92,31 +103,29 @@ gulp.task 'bump', ->
     .pipe gulp.dest './'
 
 
-gulp.task 'test', ['build'], ->
-  argv = yargs
-    .usage '''
+# A server for the test page
+gulp.task 'testserver', ->
+  connect.server opts =
+    root: __dirname
+    host: 'localhost'
+    port: 1337
+    livereload: true
+  url = "http://#{opts.host}:#{opts.port}/test/index.html"
+  browser = 'Google Chrome'
+  open url, browser, (error) ->
+    if error
+      log.error 'open', error
+    else
+      log 'open', "Opened #{chalk.magenta url} in #{chalk.green browser}"
+      file: 'index.html'
 
-           Run the test suite.
 
-           Usage: gulp test [--grep 'some string']
-           '''
-    .options
-      grep:
-        alias: 'g'
-        describe: '''
-                  Run only the tests that pass a grep-like match against the
-                  provided string. This is a very thin wrapper around the mocha
-                  'grep' option.
-                  '''
-    .argv
-
-  gulp.src ['./test/**/*.coffee'], read: false
-    .pipe mocha(reporter: 'spec', grep: argv.grep).on 'error', (error) ->
-      log.error 'mocha', error
+gulp.task 'test', ['build:browser', 'build:tests', 'testserver']
 
 
 gulp.task 'watch', ->
-  gulp.watch ['./src/**/*', './test/**/*'], ['test']
+  gulp.watch './src/**/*.?(lit)coffee', ['build']
+  gulp.watch './test/**/*.?(lit)coffee', ['build:tests']
 
 
 gulp.task 'dev', ['test', 'watch']
