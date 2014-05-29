@@ -10,6 +10,17 @@ Status =
   LOADED: 'loaded'
   FAILED: 'failed'
 
+ContextTypes =
+  loadQueue: (props, propName, componentName) ->
+    loadQueue = props[propName]
+    unless loadQueue?
+      console.warn "Required context `#{propName}` was not specified for `#{componentName}`"
+      return false
+    unless typeof loadQueue['enqueue'] is 'function'
+      console.warn "Context `#{propName}` must have an `enqueue` method for `#{componentName}`"
+      return false
+    true
+
 
 LoaderMixin =
   statics: {Status}
@@ -17,18 +28,15 @@ LoaderMixin =
     loader: PropTypes.func.isRequired
     src: PropTypes.string.isRequired
     priority: PropTypes.number
+  contextTypes:
+    loadQueue: ContextTypes.loadQueue
   getInitialState: ->
     status: Status.PENDING
   componentDidMount: ->
     return unless @state.status is Status.PENDING
-    # loadImage = (callback) ->
-    #   imageLoader @props.src, callback
-    # result = @context.loadQueue.enqueue loadImage, priority: @props.priority
+    loader = (callback) => @props.loader @props.src, callback
     loadResult = @context.loadQueue
-      .load
-        url: @props.src
-        loader: @props.loader
-        priority: @props.priority
+      .enqueue loader, priority: @props.priority
       .then @handleLoad, @handleError
     @setState {loadResult, status: Status.LOADING}
 
