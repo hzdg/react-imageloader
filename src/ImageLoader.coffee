@@ -1,8 +1,7 @@
 React = require 'react'
-imageLoader = require 'queueup-imageloader'
 
 {PropTypes} = React
-{img} = React.DOM
+{span, img} = React.DOM
 
 Status =
   PENDING: 'pending'
@@ -13,10 +12,7 @@ Status =
 ContextTypes =
   loadQueue: (props, propName, componentName) ->
     loadQueue = props[propName]
-    unless loadQueue?
-      console.warn "Required context `#{propName}` was not specified for `#{componentName}`"
-      return false
-    unless typeof loadQueue['enqueue'] is 'function'
+    if loadQueue? and typeof loadQueue['enqueue'] isnt 'function'
       console.warn "Context `#{propName}` must have an `enqueue` method for `#{componentName}`"
       return false
     true
@@ -25,7 +21,6 @@ ContextTypes =
 LoaderMixin =
   statics: {Status}
   propTypes:
-    loader: PropTypes.func.isRequired
     src: PropTypes.string.isRequired
     priority: PropTypes.number
   contextTypes:
@@ -34,11 +29,14 @@ LoaderMixin =
     status: Status.PENDING
   componentDidMount: ->
     return unless @state.status is Status.PENDING
-    loader = (callback) => @props.loader @props.src, callback
-    loadResult = @context.loadQueue
-      .enqueue loader, priority: @props.priority
-      .then @handleLoad, @handleError
-    @setState {loadResult, status: Status.LOADING}
+    if @context?.loadQueue?
+      loader = (callback) =>
+        @loadImage @props.src, callback
+      loadResult = @context.loadQueue
+        .enqueue loader, priority: @props.priority
+      @setState {loadResult}
+    else
+      @loadImage @props.src
   componentWillReceiveProps: (nextProps) ->
     if nextProps.priority? and @state?.loadResult?
       @state.loadResult.priority nextProps.priority
@@ -48,21 +46,57 @@ module.exports = ImageLoader = React.createClass
   displayName: 'ImageLoader'
   mixins: [LoaderMixin]
   propTypes:
+    wrapper: PropTypes.func
     preloader: PropTypes.func
     onLoad: PropTypes.func
     onError: PropTypes.func
-  getDefaultProps: -> preloader: img, loader: imageLoader
-  handleLoad: (el) -> @setState status: Status.LOADED
-  handleError: (error) -> @setState {error, status: Status.FAILED}
+  getDefaultProps: ->
+    wrapper: span
+  loadImage: (opts, cb) ->
+    @setState
+      status: Status.LOADING
+      imageToLoad:
+        opts: opts
+        cb: cb
+  handleLoad: (event) ->
+    img = @refs.img
+    if 'naturalWidth' of img and (img.naturalWidth + img.naturalHeight is 0) or (img.width + img.height is 0)
+      @handleError new Error "Image <#{img.src}> could not be loaded."
+    else
+      @setState status: Status.LOADED, =>
+        @props.onLoad()  # FIXME: What does this callback get?
+  handleError: (error) ->
+    @setState {error, status: Status.FAILED}, =>
+      @props.onError error
+  getClassName: ->
+    # Build a CSS class name based on the current state.
+    className = "imageloader #{ @state.status }"
+    className += " #{ @props.className }" if @props.className
+    className
   render: ->
+    (@props.wrapper
+      className: @getClassName()
+      @renderStatus()
+    )
+  renderStatus: ->
+    result = []
+    if @state.imageToLoad
+      result.push @renderImage()
     switch @state.status
-      when ImageLoader.Status.PENDING, ImageLoader.Status.LOADING
-        @props.preloader()
-      when ImageLoader.Status.ERROR
-        (div className: 'error', @props.children)
-      when ImageLoader.Status.LOADED
-        (img
-          src: @props.src
-          onLoad: @props.onLoad
-          onError: @props.onError
-        )
+      when Status.PENDING, Status.LOADING
+        result.push new @props.preloader if @props.preloader
+      when Status.ERROR
+        if Array.isArray @props.children
+          result = result.concat @props.children
+        else
+          result.push @props.children
+    result
+  renderImage: ->
+    (img
+      ref: 'img'
+      src: @state.imageToLoad.opts.url
+      onLoad: @handleLoad
+      onError: @handleError
+      style:
+        display: if @state.status is Status.LOADED then null else 'none'
+    )
