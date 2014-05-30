@@ -39,6 +39,9 @@ LoaderMixin =
       .enqueue loader, priority: @props.priority
       .then @handleLoad, @handleError
     @setState {loadResult, status: Status.LOADING}
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.priority? and @state?.loadResult?
+      @state.loadResult.priority nextProps.priority
 
 
 module.exports = ImageLoader = React.createClass
