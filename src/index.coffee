@@ -22,7 +22,7 @@ module.exports = ImageLoader = React.createClass
   displayName: 'ImageLoader'
   statics: {Status}
   propTypes:
-    src: PropTypes.string.isRequired
+    src: PropTypes.string
     priority: PropTypes.number
     wrapper: PropTypes.func
     preloader: PropTypes.func
