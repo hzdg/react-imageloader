@@ -1,2 +1,2 @@
-react-loadercomponents
-=====================
+react-imageloader
+=================

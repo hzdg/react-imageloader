@@ -1,7 +1,7 @@
 {
-  "name": "react-loadercomponents",
+  "name": "react-imageloader",
   "version": "0.0.0",
-  "description": "React components for wrangling loading",
+  "description": "A React component for wrangling image loading",
   "main": "./lib/index.js",
   "scripts": {
     "prepublish": "gulp build",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/hzdg/react-loadercomponents.git"
+    "url": "git://github.com/hzdg/react-imageloader.git"
   },
   "keywords": [
     "react-component",
@@ -20,9 +20,9 @@
   "author": "Eric Eldredge <lettertwo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hzdg/react-loadercomponents/issues"
+    "url": "https://github.com/hzdg/react-imageloader/issues"
   },
-  "homepage": "https://github.com/hzdg/react-loadercomponents",
+  "homepage": "https://github.com/hzdg/react-imageloader",
   "dependencies": {},
   "devDependencies": {
     "coffee-script": "^1.7.1",

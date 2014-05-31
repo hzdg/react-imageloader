@@ -34,9 +34,9 @@ gulp.task 'build:node', ->
 gulp.task 'build:browser', ['build:node'], ->
   gulp.src './lib/index.js'
     .pipe browserify
-      standalone: 'ReactLoaderComponents'
+      standalone: 'ReactImageLoader'
       transform: ['browserify-shim']
-    .pipe rename('react-loadercomponents.js')
+    .pipe rename('react-imageloader.js')
     .pipe gulp.dest('./standalone/')
     .pipe connect.reload()
 

@@ -1,12 +1,13 @@
 {assert} = chai
-{ImageLoader} = ReactLoaderComponents
 
 
-describe 'ImageLoader', ->
+describe 'ReactImageLoader', ->
   makeImageLoaderWrapperClass = (queue) ->
     React.createClass
       render: ->
-        React.withContext loadQueue: queue, => @transferPropsTo ImageLoader()
+        React.withContext
+          loadQueue: queue
+          => @transferPropsTo ReactImageLoader()
 
   div = null
   loadResult = null

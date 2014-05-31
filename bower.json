@@ -1,11 +1,11 @@
 {
-  "name": "react-loadercomponents",
+  "name": "react-imageloader",
   "version": "0.0.0",
   "authors": [
     "Eric Eldredge <lettertwo@gmail.com>"
   ],
-  "description": "React components for wrangling loading",
-  "main": "./standalone/react-components.js",
+  "description": "A React component for wrangling image loading",
+  "main": "./standalone/react-imageloader.js",
   "keywords": [
     "react-component",
     "react",
@@ -13,7 +13,7 @@
     "component"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/hzdg/react-loadercomponents",
+  "homepage": "https://github.com/hzdg/react-imageloader",
   "ignore": [
     "**/.*",
     "node_modules",
