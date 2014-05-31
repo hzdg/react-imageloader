@@ -19,8 +19,8 @@ just such a way, and this [React] component allows an easy way of hooking asset
 loading for components into a load queue.
 
 
-`loadQueue`
------------
+Load Queue
+----------
 
 If you render the component with a `loadQueue` in context (using
 `React.withContext`), then control of the load will be handed off to the load
@@ -63,10 +63,31 @@ var ImageLoadQueueLoader = React.createClass({
 ```
 
 
+Context
+-------
+
+<table>
+  <thead>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`loadQueue`</td>
+      <td>object</td>
+      <td>An object that manages loads in a queue. It is expected to have an
+          `enqueue` method that takes a function that performs the load. When
+          the load queue is ready to load the image, it should call the provided
+          function, passing it a callback. That callback will be called when the
+          load completes (or errors).</td>
+    </tr>
+  </tbody>
+</table>
+
+
 Props
 -----
-
-### ImageLoader
 
 <table>
   <thead>
