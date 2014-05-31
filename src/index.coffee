@@ -30,27 +30,47 @@ module.exports = ImageLoader = React.createClass
     onError: PropTypes.func
   contextTypes:
     loadQueue: ContextTypes.loadQueue
+
   getInitialState: ->
     status: Status.PENDING
+
   getDefaultProps: ->
     wrapper: span
+
   componentDidMount: ->
     return unless @state.status is Status.PENDING
+    if @props?.src?
+      @initiateLoad @props.src, @props.priority
 
-    # If there is a loadQueue in context, enqueue the load for this image.
-    # Otherwise, just initiate the load of this image right away.
+  componentWillUnmount: ->
+    @state?.loadResult?.cancel?()
+
+  componentWillReceiveProps: (nextProps) ->
+    # If a new `src` has been provided, try to cancel a pending load (if there
+    # is one), and initiate a new load. Otherwise, if a new `priorty` has been
+    # provided, try to update the existing load's priority. Both cancelling and
+    # priority are dependent on a `loadQueue` being in context.
+    if nextProps.src?
+      @state?.loadResult?.cancel?()
+      @initiateLoad nextProps.src, nextProps.priority
+    else if nextProps.priority? and @state?.loadResult?
+      @state.loadResult.priority? nextProps.priority
+
+  initiateLoad: (url, priority) ->
+    # If there is a `loadQueue` in context, enqueue the load for this image.
+    # Otherwise, load the image right away.
     if @context?.loadQueue?
       loader = (callback) =>
-        @loadImage @props.src, callback
+        @loadImage {url}, callback
       loadResult = @context.loadQueue
-        .enqueue loader, priority: @props.priority
+        .enqueue loader, {priority}
       @setState {loadResult}
     else
-      @loadImage @props.src
-  componentWillReceiveProps: (nextProps) ->
-    if nextProps.priority? and @state?.loadResult?
-      @state.loadResult.priority? nextProps.priority
+      @loadImage {url}
+
   loadImage: (opts, cb) ->
+    # If the component has been unmounted since the load was enqueued, don't
+    # bother starting the load now.
     return unless @isMounted()
     return if @state?.imageToLoad?.opts.url is opts.url
     @setState
@@ -58,27 +78,36 @@ module.exports = ImageLoader = React.createClass
       imageToLoad:
         opts: opts
         cb: cb
+
   handleLoad: ->
+    # If the component has been unmounted since the load was enqueued, don't
+    # bother handling the load now.
     return unless @isMounted()
     img = @refs.img
     if 'naturalWidth' of img and (img.naturalWidth + img.naturalHeight is 0) or (img.width + img.height is 0)
       @handleError new Error "Image <#{img.src}> could not be loaded."
     else
       @setState status: Status.LOADED, =>
+        @state.imageToLoad.cb? null, @refs.img.getDOMNode()
         @props.onLoad? arguments...
-  handleError: ->
+
+  handleError: (event) ->
     @setState status: Status.FAILED, =>
+      @state.imageToLoad.cb? event.error
       @props.onError? arguments...
+
   getClassName: ->
     # Build a CSS class name based on the current state.
     className = "imageloader #{ @state.status }"
     className += " #{ @props.className }" if @props.className
     className
+
   render: ->
     (@props.wrapper
       className: @getClassName()
       @renderStatus()
     )
+
   renderStatus: ->
     result = []
     if @state.imageToLoad
@@ -92,6 +121,7 @@ module.exports = ImageLoader = React.createClass
         else
           result.push @props.children
     result
+
   renderImage: ->
     (img
       ref: 'img'
