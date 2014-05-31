@@ -49,7 +49,7 @@ module.exports = ImageLoader = React.createClass
       @loadImage @props.src
   componentWillReceiveProps: (nextProps) ->
     if nextProps.priority? and @state?.loadResult?
-      @state.loadResult.priority nextProps.priority
+      @state.loadResult.priority? nextProps.priority
   loadImage: (opts, cb) ->
     return unless @isMounted()
     return if @state?.imageToLoad?.opts.url is opts.url
