@@ -3,28 +3,20 @@ react-imageloader
 
 One of the hardest things to wrangle in the browser is loading. When images and
 other linked elements appear in the DOM, the browser makes decisions on when to
-load them that sometimes result in problems for user, such as [FOUC], unexpected
-load ordering, and degraded performance when many loads are occurring.
+load them that sometimes result in problems for a site and its users, such as
+[FOUC], unexpected load ordering, and degraded performance when many loads are
+occurring.
 
 This component can improve the situation by allowing you to display content
 while waiting for the image to load, as well as by showing alternate content
 if the image fails to load.
 
-However, if you have more than a few images to load, you may want to take the
-decisions about what to load and when from the browser, but still reap the
-benefits of queuing and prioritizing that the browser is capable of.
-
-A load queue (such as [queueup.js]) allows you to manage and prioritize loads in
-just such a way, and this [React] component allows an easy way of hooking asset
+Additionally, if you have more than a few images to load, you may want to take
+the decisions about what to load and when from the browser, but still reap the
+benefits of queuing and prioritizing that the browser is capable of. A load
+queue (such as [queueup.js]) allows you to manage and prioritize loads in just
+such a way, and this [React] component allows an easy way of hooking asset
 loading for components into a load queue.
-
-
-Load Queue
-----------
-
-If you render the component with a `loadQueue` in context (using
-`React.withContext`), then control of the load will be handed off to the load
-queue, meaning it can be prioritized amongst other loads.
 
 
 Usage
@@ -40,7 +32,14 @@ var ImageLoader = require('react-imageloader');
 </ImageLoader>
 
 ```
-or with a load queue (such as [queueup.js]):
+
+
+Load Queue
+----------
+
+If you render the component with a `loadQueue` (such as [queueup.js]) in context
+(using `React.withContext`), then control of the load will be handed off to the
+load queue, meaning it can be prioritized amongst other loads.
 
 ```javascript
 var ImageLoader = require('react-imageloader');
