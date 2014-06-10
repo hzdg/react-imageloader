@@ -83,12 +83,12 @@ module.exports = ImageLoader = React.createClass
     # If the component has been unmounted since the load was enqueued, don't
     # bother handling the load now.
     return unless @isMounted()
-    img = @refs.img
-    if 'naturalWidth' of img and (img.naturalWidth + img.naturalHeight is 0) or (img.width + img.height is 0)
-      @handleError new Error "Image <#{img.src}> could not be loaded."
+    image = @refs.image
+    if 'naturalWidth' of image and (image.naturalWidth + image.naturalHeight is 0) or (image.width + image.height is 0)
+      @handleError new Error "Image <#{image.src}> could not be loaded."
     else
       @setState status: Status.LOADED, =>
-        @state.imageToLoad.cb? null, @refs.img.getDOMNode()
+        @state.imageToLoad.cb? null, @refs.image.getDOMNode()
         @props.onLoad? arguments...
 
   handleError: (event) ->
