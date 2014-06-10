@@ -26,8 +26,10 @@ log.error = (plugin, error) ->
 
 gulp.task 'build:node', ->
   gulp.src './src/*.?(lit)coffee'
-    .pipe coffee(bare: true).on 'error', (error) ->
+    .pipe coffee bare: true
+    .on 'error', (error) ->
       log.error 'coffee', error
+      @end()
     .pipe gulp.dest './lib'
 
 
@@ -43,8 +45,10 @@ gulp.task 'build:browser', ['build:node'], ->
 
 gulp.task 'build:tests', ->
   gulp.src './test/**/*.?(lit)coffee'
-    .pipe coffee().on 'error', (error) ->
+    .pipe coffee()
+    .on 'error', (error) ->
       log.error 'coffee', error
+      @end()
     .pipe browserify
       transform: ['browserify-shim']
     .pipe gulp.dest('./test/')
