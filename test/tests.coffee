@@ -2,6 +2,7 @@
 ImageLoader = ReactImageLoader
 
 nocache = (url) -> "#{ url }?r=#{ Math.floor Math.random() * Date.now() / 16 }"
+defer = (fn) -> setTimeout fn, 0
 
 
 describe 'ReactImageLoader', ->
@@ -47,19 +48,27 @@ describe 'ReactImageLoader', ->
     wrapper = render (ImageLoader
       src: nocache 'tiger.svg'
       onLoad: ->
-        img = wrapper.getElementsByTagName('img')[0]
-        assert.notOk img.style.display, 'Expected img display to be falsy'
-        done()
+        # FIXME: We set a timeout here because the style change we're testing
+        # happens on the next render. Is there a cleaner, less brittle way to
+        # test this?
+        defer ->
+          img = wrapper.getElementsByTagName('img')[0]
+          assert.notOk img.style.display, 'Expected img display to be falsy'
+          done()
     )
 
   it 'shows alternative content on error', (done) ->
     wrapper = render (ImageLoader
       src: nocache 'fake.jpg'
       onError: ->
-        span = wrapper.getElementsByTagName('span')[0]
-        assert.equal span.childNodes[0].data, 'error',
-          'Expected error message to be rendered'
-        done()
+        # FIXME: We set a timeout here because the style change we're testing
+        # happens on the next render. Is there a cleaner, less brittle way to
+        # test this?
+        defer ->
+          span = wrapper.getElementsByTagName('span')[0]
+          assert.equal span.childNodes[0].data, 'error',
+            'Expected error message to be rendered'
+          done()
       'error'
     )
 
@@ -78,8 +87,12 @@ describe 'ReactImageLoader', ->
       src: nocache 'tiger.svg'
       preloader: -> ref = (React.DOM.div null)
       onLoad: ->
-        assert.equal wrapper.childElementCount, 1,
-          'Expected wrapper to have exactly one child'
-        assert.isFalse ref.isMounted(), 'Expected preloader not to be mounted'
-        done()
+        # FIXME: We set a timeout here because the style change we're testing
+        # happens on the next render. Is there a cleaner, less brittle way to
+        # test this?
+        defer ->
+          assert.equal wrapper.childElementCount, 1,
+            'Expected wrapper to have exactly one child'
+          assert.isFalse ref.isMounted(), 'Expected preloader not to be mounted'
+          done()
     )
