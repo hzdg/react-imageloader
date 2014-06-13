@@ -7,9 +7,9 @@ load them that sometimes result in problems for a site and its users, such as
 [FOUC], unexpected load ordering, and degraded performance when many loads are
 occurring.
 
-This component can improve the situation by allowing you to display content
-while waiting for the image to load, as well as by showing alternate content
-if the image fails to load.
+This [React] component can improve the situation by allowing you to display
+content while waiting for the image to load, as well as by showing alternate
+content if the image fails to load.
 
 
 Usage
@@ -38,31 +38,34 @@ Props
   </thead>
   <tbody>
     <tr>
-      <td>`src`</td>
+      <td><code>src</code></td>
       <td>string</td>
       <td>The URL of the image to be loaded.</td>
     </tr>
     <tr>
-      <td>`preloader`</td>
+      <td><code>preloader</code></td>
       <td>function</td>
       <td>A React class or other function that returns a component instance to
           be shown while the image loads.</td>
     </tr>
     <tr>
-      <td>`onLoad`</td>
+      <td><code>onLoad</code></td>
       <td>function</td>
-      <td>A handler for the React `<img>` `onLoad` event.</td>
+      <td>A handler for the React <code>React.DOM.img</code>
+          <code>onLoad</code> event.</td>
     </tr>
     <tr>
-      <td>`onError`</td>
+      <td><code>onError</code></td>
       <td>function</td>
-      <td>A handler for the React `<img>` `onError` event.</td>
+      <td>A handler for the React <code>React.DOM.img</code>
+          <code>onError</code> event.</td>
     </tr>
     <tr>
-      <td>`wrapper`</td>
+      <td><code>wrapper</code></td>
       <td>function</td>
       <td>A React class or other function that returns a component instance to
-          be used as the wrapper component. Defaults to `React.DOM.span`.</td>
+          be used as the wrapper component. Defaults to
+          <code>React.DOM.span</code>.</td>
     </tr>
   </tbody>
 </table>
