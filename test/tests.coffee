@@ -96,3 +96,14 @@ describe 'ReactImageLoader', ->
           assert.isFalse ref.isMounted(), 'Expected preloader not to be mounted'
           done()
     )
+  it 'transfers img props to the underlying img element', ->
+    wrapper = render (ImageLoader
+      src: nocache 'tiger.svg'
+      alt: 'this is alt text'
+      style:
+        width: 100
+    )
+    img = wrapper.getElementsByTagName('img')[0]
+    assert.equal img.style.width, '100px', "Expected img width to be '100px'"
+    assert.equal img.attributes.alt.value, 'this is alt text',
+      'Expected img to have alt text'

@@ -53,6 +53,11 @@ module.exports = ImageLoader = React.createClass
     className = "imageloader #{ @state.status }"
     className += " #{ @props.className }" if @props.className
     className
+  getImgProps: ->
+    # TODO: Should we strip props that are specific to ImageLoader/LoaderMixin?
+    merge @props,
+      style: merge @props.style,
+        display: if @state.status is Status.LOADED then null else 'none'
   loaderDidLoad: ->
     @setState status: Status.LOADED
   loaderDidError: ->
@@ -63,8 +68,7 @@ module.exports = ImageLoader = React.createClass
   render: ->
     children = []
     if @props.src
-      children.push @renderLoader ImageLoaderImg,
-        style: display: if @state.status is Status.LOADED then null else 'none'
+      children.push @renderLoader ImageLoaderImg, @getImgProps()
     if @props.preloader and @state.status isnt Status.LOADED
       children.push new @props.preloader
     if @state.status is Status.FAILED
