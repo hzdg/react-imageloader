@@ -85,6 +85,13 @@ module.exports = ImageLoader = React.createClass({
     }
     return className;
   },
+  getImgProps: function() {
+    return merge(this.props, {
+      style: merge(this.props.style, {
+        display: this.state.status === Status.LOADED ? null : 'none'
+      })
+    });
+  },
   loaderDidLoad: function() {
     return this.setState({
       status: Status.LOADED
@@ -106,11 +113,7 @@ module.exports = ImageLoader = React.createClass({
     var children;
     children = [];
     if (this.props.src) {
-      children.push(this.renderLoader(ImageLoaderImg, {
-        style: {
-          display: this.state.status === Status.LOADED ? null : 'none'
-        }
-      }));
+      children.push(this.renderLoader(ImageLoaderImg, this.getImgProps()));
     }
     if (this.props.preloader && this.state.status !== Status.LOADED) {
       children.push(new this.props.preloader);
