@@ -86,11 +86,15 @@ module.exports = ImageLoader = React.createClass({
     return className;
   },
   getImgProps: function() {
-    return merge(this.props, {
+    var props;
+    props = merge(this.props, {
       style: merge(this.props.style, {
         display: this.state.status === Status.LOADED ? null : 'none'
       })
     });
+    delete props.wrapper;
+    delete props.preloader;
+    return props;
   },
   loaderDidLoad: function() {
     return this.setState({
