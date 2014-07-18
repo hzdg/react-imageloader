@@ -27,7 +27,7 @@ ImageLoaderImg = React.createClass
   handleError: (args...) ->
     @props.onError? args...
   render: ->
-    @transferPropsTo (img
+    (img merge @props,
       ref: 'image'
       onLoad: @handleLoad
       onError: @handleError

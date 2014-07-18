@@ -44,7 +44,7 @@ ImageLoaderImg = React.createClass({
     return typeof (_base = this.props).onError === "function" ? _base.onError.apply(_base, args) : void 0;
   },
   render: function() {
-    return this.transferPropsTo(img({
+    return img(merge(this.props, {
       ref: 'image',
       onLoad: this.handleLoad,
       onError: this.handleError
