@@ -4,7 +4,7 @@
   "description": "A React component for wrangling image loading",
   "main": "./lib/index.js",
   "scripts": {
-    "prepublish": "gulp build",
+    "prepublish": "gulp build:node",
     "test": "gulp test"
   },
   "repository": {
