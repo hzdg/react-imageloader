@@ -39,7 +39,7 @@
     "chai": "^1.9.1",
     "mocha": "^1.20.0",
     "xtend": "^3.0.0",
-    "react-loadermixin": "^1.0.0"
+    "react-loadermixin": "^1.0.2"
   },
   "peerDependencies": {
     "react": "*",
