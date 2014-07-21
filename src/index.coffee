@@ -1,4 +1,4 @@
-React = require 'react'
+React = require 'React'
 merge = require 'xtend'
 ReactLoaderMixin = require 'react-loadermixin'
 

@@ -2,11 +2,12 @@ gulp = require 'gulp'
 chalk = require 'chalk'
 gbump = require 'gulp-bump'
 coffee = require 'gulp-coffee'
-browserify = require 'gulp-browserify'
 rename = require 'gulp-rename'
 connect = require 'gulp-connect'
 open = require 'open'
 path = require 'path'
+webpack = require 'webpack'
+webpackConfig = require './webpack.config'
 
 yargs = require 'yargs'
   .wrap 80
@@ -33,14 +34,15 @@ gulp.task 'build:node', ->
     .pipe gulp.dest './lib'
 
 
-gulp.task 'build:browser', ['build:node'], ->
-  gulp.src './lib/index.js'
-    .pipe browserify
-      standalone: 'ReactImageLoader'
-      transform: ['browserify-shim']
-    .pipe rename('react-imageloader.js')
-    .pipe gulp.dest('./standalone/')
-    .pipe connect.reload()
+gulp.task 'build:browser', (done) ->
+  web = webpack webpackConfig
+    .run (err, stats) ->
+      if err then log.error('webpack', err) and throw err
+      log 'webpack', line for line in stats
+        .toString colors: true, chunks: false
+        .split '\n'
+      connect.reload()
+      done()
 
 
 gulp.task 'build:tests', ->
@@ -49,8 +51,6 @@ gulp.task 'build:tests', ->
     .on 'error', (error) ->
       log.error 'coffee', error
       @end()
-    .pipe browserify
-      transform: ['browserify-shim']
     .pipe gulp.dest('./test/')
     .pipe connect.reload()
 
