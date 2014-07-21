@@ -105,13 +105,11 @@ module.exports = ImageLoader = React.createClass
     if Array.isArray @props.children then @props.children[..]
     else [@props.children]
   render: ->
-    children = []
+    wrapperArgs = [className: @getClassName()]
     if @props.src
-      children.push @renderLoader ImageLoaderImg, @getImgProps()
+      wrapperArgs.push @renderLoader ImageLoaderImg, @getImgProps()
     if @props.preloader and @state.status isnt Status.LOADED
-      children.push new @props.preloader
+      wrapperArgs.push @props.preloader()
     if @state.status is Status.FAILED
-      children = children.concat @renderChildren()
-    @props.wrapper
-      className: @getClassName()
-      children
+      wrapperArgs = wrapperArgs.concat @renderChildren()
+    @props.wrapper wrapperArgs...
