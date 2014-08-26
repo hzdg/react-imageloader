@@ -1,6 +1,6 @@
 {
   "name": "react-imageloader",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A React component for wrangling image loading",
   "main": "./lib/index.js",
   "scripts": {
