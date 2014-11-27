@@ -16,7 +16,7 @@ hasSize = (i) ->
   (i.naturalWidth + i.naturalHeight is 0) or (i.width + i.height is 0)
 
 
-ImageLoaderImg = React.createClass
+ImageLoaderImg = React.createFactory( React.createClass
   displayName: 'ImageLoaderImage'
   getInitialState: ->
     # We don't want to render the image on the server, because that will result
@@ -60,7 +60,7 @@ ImageLoaderImg = React.createClass
       # (https://github.com/facebook/react/issues/1252) that causes noscript to
       # cause invariant violations when rendered on the server. So, we render it
       # as a string and set the inner HTML of a wrapper span.
-      html = React.renderComponentToStaticMarkup (noscript null, @renderImg())
+      html = React.renderToStaticMarkup (noscript null, @renderImg())
       (span
         style:
           display: 'none'
@@ -69,6 +69,7 @@ ImageLoaderImg = React.createClass
       )
     else
       @renderImg()
+)
 
 
 module.exports = ImageLoader = React.createClass
