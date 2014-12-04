@@ -1,109 +1,89 @@
 {assert} = chai
-ImageLoader = ReactImageLoader
+{TestUtils} = React.addons
+ImageLoader = React.createFactory ReactImageLoader
 
 nocache = (url) -> "#{ url }?r=#{ Math.floor Math.random() * Date.now() / 16 }"
 defer = (fn) -> setTimeout fn, 0
 
 
 describe 'ReactImageLoader', ->
-  div = null
-
-  render = (component) ->
-    React.renderComponent component, div
-    div.children[0]
-
-  beforeEach ->
-    div = document.createElement 'div'
 
   it 'gives the wrapper a className', ->
-    wrapper = render (ImageLoader className: 'test value')
-    assert wrapper.classList.contains('imageloader'),
-      "Expected wrapper to have 'imageloader' class"
-    assert wrapper.classList.contains('test'),
-      "Expected wrapper to have 'test' class"
-    assert wrapper.classList.contains('value'),
-      "Expected wrapper to have 'value' class"
+    loader = TestUtils.renderIntoDocument (ImageLoader className: 'test value')
+    assert TestUtils.findRenderedDOMComponentWithClass loader, 'imageloader'
+    assert TestUtils.findRenderedDOMComponentWithClass loader, 'test'
+    assert TestUtils.findRenderedDOMComponentWithClass loader, 'value'
 
   it 'uses a custom wrapper', ->
-    ref = null
-    wrapper = render (ImageLoader wrapper: -> ref = (React.DOM.div null))
-    assert.equal ref.getDOMNode(), wrapper,
-      'Expected wrapper to be custom'
+    loader = TestUtils.renderIntoDocument (ImageLoader null)
+    assert TestUtils.findRenderedDOMComponentWithTag loader, 'span'
+    loader = TestUtils.renderIntoDocument (ImageLoader wrapper: React.DOM.div)
+    assert TestUtils.findRenderedDOMComponentWithTag loader, 'div'
 
   it 'does not render the image without a src', ->
-    wrapper = render (ImageLoader className: 'test value')
-    assert wrapper.classList.contains('pending'),
-      "Expected wrapper to have 'pending' class"
-    assert.isFalse wrapper.classList.contains('loading'),
-      "Expected wrapper not to have 'loading' class"
-    assert.equal wrapper.childElementCount, 0,
-      'Expected wrapper to have no children'
+    loader = TestUtils.renderIntoDocument (ImageLoader className: 'test value')
+    assert TestUtils.findRenderedDOMComponentWithClass loader, 'pending'
+    assert.throws -> TestUtils.findRenderedDOMComponentWithClass loader, 'loading'
+    assert.equal loader.getDOMNode().childElementCount, 0, 'Expected wrapper to have no children'
 
   it 'renders the image as not visible', ->
-    wrapper = render (ImageLoader src: nocache 'tiger.svg')
-    img = wrapper.getElementsByTagName('img')[0]
-    assert img.style.display is 'none', "Expected img display to be 'none'"
+    loader = TestUtils.renderIntoDocument (ImageLoader src: nocache 'tiger.svg')
+    img = TestUtils.findRenderedDOMComponentWithTag loader, 'img'
+    assert.equal img.props.style.display, 'none', "Expected img display to be 'none'"
 
   it 'renders the image as visible when load completes', (done) ->
-    wrapper = render (ImageLoader
+    loader = TestUtils.renderIntoDocument (ImageLoader
       src: nocache 'tiger.svg'
       onLoad: ->
         # FIXME: We set a timeout here because the style change we're testing
         # happens on the next render. Is there a cleaner, less brittle way to
         # test this?
         defer ->
-          img = wrapper.getElementsByTagName('img')[0]
-          assert.notOk img.style.display, 'Expected img display to be falsy'
+          img = TestUtils.findRenderedDOMComponentWithTag loader, 'img'
+          assert.notOk img.props.style.display, 'Expected img display to be falsy'
           done()
-    )
+      )
 
   it 'shows alternative content on error', (done) ->
-    wrapper = render (ImageLoader
+    loader = TestUtils.renderIntoDocument (ImageLoader
       src: nocache 'fake.jpg'
       onError: ->
         # FIXME: We set a timeout here because the style change we're testing
         # happens on the next render. Is there a cleaner, less brittle way to
         # test this?
         defer ->
-          span = wrapper.getElementsByTagName('span')[0]
-          assert.equal span.childNodes[0].data, 'error',
-            'Expected error message to be rendered'
+          span = TestUtils.findRenderedDOMComponentWithTag loader, 'span'
+          textNodes = TestUtils.findAllInRenderedTree span, (n) -> TestUtils.isTextComponent n
+          assert.lengthOf textNodes, 1, 'Expected one text node'
+          assert.equal textNodes[0].props, 'error', 'Expected error message to be rendered'
           done()
       'error'
-    )
+      )
 
   it 'shows a preloader if provided', ->
-    ref = null
-    wrapper = render (ImageLoader
-      preloader: -> ref = (React.DOM.div null)
-    )
-    assert.isTrue ref.isMounted(), 'Expected preloader to be mounted'
-    assert.equal ref.getDOMNode(), wrapper.getElementsByTagName('div')[0],
-      'Expected preloader to be rendered'
+    loader = TestUtils.renderIntoDocument (ImageLoader preloader: React.DOM.div)
+    assert TestUtils.findRenderedDOMComponentWithTag loader, 'div'
 
   it 'removes a preloader when load completes', (done) ->
-    ref = null
-    wrapper = render (ImageLoader
+    loader = TestUtils.renderIntoDocument (ImageLoader
       src: nocache 'tiger.svg'
-      preloader: -> ref = (React.DOM.div null)
+      preloader: React.DOM.div
       onLoad: ->
         # FIXME: We set a timeout here because the style change we're testing
         # happens on the next render. Is there a cleaner, less brittle way to
         # test this?
         defer ->
-          assert.equal wrapper.childElementCount, 1,
-            'Expected wrapper to have exactly one child'
-          assert.isFalse ref.isMounted(), 'Expected preloader not to be mounted'
+          assert.throws -> TestUtils.findRenderedDOMComponentWithTag loader, 'div'
           done()
-    )
+      )
+
   it 'transfers img props to the underlying img element', ->
-    wrapper = render (ImageLoader
+    loader = TestUtils.renderIntoDocument (ImageLoader
       src: nocache 'tiger.svg'
       alt: 'this is alt text'
       style:
         width: 100
-    )
-    img = wrapper.getElementsByTagName('img')[0]
-    assert.equal img.style.width, '100px', "Expected img width to be '100px'"
-    assert.equal img.attributes.alt.value, 'this is alt text',
-      'Expected img to have alt text'
+      )
+    img = TestUtils.findRenderedDOMComponentWithTag loader, 'img'
+    assert.equal img.props.style.width, 100, "Expected img width to be 100"
+    assert.equal img.props.alt, 'this is alt text', 'Expected img to have alt text'
