@@ -3,7 +3,9 @@ merge = require 'xtend'
 ReactLoaderMixin = require 'react-loadermixin'
 
 {PropTypes} = React
-{span, img, noscript} = React.DOM
+span = React.createElement.bind(React, 'span')
+img = React.createElement.bind(React, 'img')
+noscript = React.createElement.bind(React, 'noscript')
 
 Status =
   PENDING: 'pending'
