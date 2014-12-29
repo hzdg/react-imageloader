@@ -3,7 +3,9 @@ merge = require 'xtend'
 ReactLoaderMixin = require 'react-loadermixin'
 
 {PropTypes} = React
-{span, img, noscript} = React.DOM
+span = React.createElement.bind(React, 'span')
+img = React.createElement.bind(React, 'img')
+noscript = React.createElement.bind(React, 'noscript')
 
 Status =
   PENDING: 'pending'
@@ -108,7 +110,7 @@ module.exports = ImageLoader = React.createClass
     wrapperArgs = [className: @getClassName()]
     if @props.src
       wrapperArgs.push @renderLoader ImageLoaderImg, @getImgProps()
-    if @props.preloader and @state.status isnt Status.LOADED
+    if @props.preloader and @state.status isnt Status.LOADED and @state.status isnt Status.FAILED
       wrapperArgs.push @props.preloader()
     if @state.status is Status.FAILED
       wrapperArgs = wrapperArgs.concat @renderChildren()
