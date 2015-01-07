@@ -15,8 +15,14 @@ Status =
 hasSize = (i) ->
   (i.naturalWidth + i.naturalHeight is 0) or (i.width + i.height is 0)
 
+renderToStaticMarkup = (el) ->
+  (React.renderToStaticMarkup or React.renderComponentToStaticMarkup) el
 
-ImageLoaderImg = React.createFactory React.createClass
+id = (x) -> x
+
+createFactory = (cls) -> (React.createFactory or id) cls
+
+ImageLoaderImg = createFactory React.createClass
   displayName: 'ImageLoaderImage'
   getInitialState: ->
     # We don't want to render the image on the server, because that will result
@@ -60,7 +66,7 @@ ImageLoaderImg = React.createFactory React.createClass
       # (https://github.com/facebook/react/issues/1252) that causes noscript to
       # cause invariant violations when rendered on the server. So, we render it
       # as a string and set the inner HTML of a wrapper span.
-      html = React.renderToStaticMarkup(noscript null, @renderImg())
+      html = renderToStaticMarkup(noscript null, @renderImg())
       (span
         style:
           display: 'none'
