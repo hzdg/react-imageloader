@@ -102,6 +102,7 @@ module.exports = ImageLoader = React.createClass
         display: if @state.status is Status.LOADED then null else 'none'
     delete props.wrapper
     delete props.preloader
+    delete props.children
     props
   loaderDidLoad: ->
     @setState status: Status.LOADED

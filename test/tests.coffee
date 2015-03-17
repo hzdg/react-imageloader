@@ -44,7 +44,7 @@ describe 'ReactImageLoader', ->
           done()
       )
 
-  it 'shows alternative content on error', (done) ->
+  it 'shows alternative string on error', (done) ->
     loader = TestUtils.renderIntoDocument (ImageLoader
       src: nocache 'fake.jpg'
       onError: ->
@@ -58,7 +58,22 @@ describe 'ReactImageLoader', ->
           assert.equal textNodes[0].props, 'error', 'Expected error message to be rendered'
           done()
       'error'
-      )
+    )
+
+  it 'shows alternative img node on error', (done) ->
+    loader = TestUtils.renderIntoDocument (ImageLoader
+      src: nocache 'fake.jpg'
+      onError: ->
+        # FIXME: We set a timeout here because the style change we're testing
+        # happens on the next render. Is there a cleaner, less brittle way to
+        # test this?
+        defer ->
+          span = TestUtils.findRenderedDOMComponentWithTag loader, 'span'
+          imgNodes = TestUtils.scryRenderedDOMComponentsWithTag(span, 'img')
+          assert.lengthOf imgNodes, 2, 'Expected two img node'
+          done()
+      React.createElement React.DOM.img
+    )
 
   it 'shows a preloader if provided', ->
     loader = TestUtils.renderIntoDocument (ImageLoader preloader: React.DOM.div)
