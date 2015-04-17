@@ -92,6 +92,19 @@ describe 'ReactImageLoader', ->
           done()
       )
 
+  it 'removes a preloader when load fails', (done) ->
+    loader = TestUtils.renderIntoDocument (ImageLoader
+      src: nocache 'fake.jpg'
+      preloader: React.DOM.div
+      onError: ->
+        # FIXME: We set a timeout here because the style change we're testing
+        # happens on the next render. Is there a cleaner, less brittle way to
+        # test this?
+        defer ->
+          assert.throws -> TestUtils.findRenderedDOMComponentWithTag loader, 'div'
+          done()
+      )
+
   it 'transfers img props to the underlying img element', ->
     loader = TestUtils.renderIntoDocument (ImageLoader
       src: nocache 'tiger.svg'
