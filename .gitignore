@@ -1,5 +1,4 @@
 /node_modules/
-/test/tests.js
 /lib/
 /vendor/react/*.json
 /vendor/react/*.min.js
