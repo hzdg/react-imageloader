@@ -3,6 +3,6 @@
 /test/
 /vendor/
 /bower.json
-/coffeelint.json
+/.eslintrc
 /src/
 /standalone/
