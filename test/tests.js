@@ -1,8 +1,7 @@
 /* eslint-env mocha */
-/* global ReactImageLoader */
-
+import ReactImageLoader from '../src';
 import {assert} from 'chai';
-import React from 'react';
+import React from 'react/addons';
 
 const ImageLoader = React.createFactory(ReactImageLoader);
 const {TestUtils} = React.addons;
