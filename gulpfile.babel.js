@@ -43,7 +43,7 @@ gulp.task('build:node', () => {
 });
 
 gulp.task('build:browser', done => {
-  const web = webpack(webpackConfig)
+  webpack(webpackConfig)
     .run((err, stats) => {
       if (err) {
         log.err('webpack', err);
