@@ -19,7 +19,7 @@ export default React.createClass({
   },
 
   getInitialState() {
-    return {status: Status.PENDING};
+    return {status: this.props.src ? Status.LOADING : Status.PENDING};
   },
 
   getDefaultProps() {

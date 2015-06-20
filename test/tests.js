@@ -32,10 +32,10 @@ describe('ReactImageLoader', () => {
     assert.equal(loader.getDOMNode().childElementCount, 0, 'Expected wrapper to have no children');
   });
 
-  it('renders the image as not visible', () => {
-    const loader = TestUtils.renderIntoDocument(<ImageLoader src={nocache('tiger.svg')} />);
-    const img = TestUtils.findRenderedDOMComponentWithTag(loader, 'img');
-    assert.equal(img.props.style.display, 'none', "Expected img display to be 'none'");
+  it('does not render the image initially', () => {
+    const loader = TestUtils.renderIntoDocument(<ImageLoader className="test value" src="fake.jpg" />);
+    assert(TestUtils.findRenderedDOMComponentWithClass(loader, 'loading'));
+    assert.equal(loader.getDOMNode().childElementCount, 0, 'Expected wrapper to have no children');
   });
 
   it('renders the image as visible when load completes', (done) => {
