@@ -2,6 +2,12 @@ import path from 'path';
 import express from 'express';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
+import open from 'opn';
+import yargs from 'yargs';
+
+const argv = yargs
+  .boolean('open', 'o', false)
+  .argv;
 
 const webpackConfig = {
   devtool: 'eval',
@@ -16,5 +22,8 @@ const app = express()
   .get('/mocha.css', (req, res) => { res.sendFile(path.join(__dirname, '../node_modules/mocha/mocha.css')); })
   .use('/built', webpackMiddleware(webpack(webpackConfig), {stats: {colors: true}}));
 
-app.listen(8080);
-console.log('server listening at 0.0.0.0:8080');
+app.listen(8080, err => {
+  if (err) throw err;
+  console.log('server listening at 0.0.0.0:8080');
+  if (argv.open) open('http://0.0.0.0:8080');
+});
