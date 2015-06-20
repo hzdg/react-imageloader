@@ -140,7 +140,7 @@ const ImageLoader = React.createClass({
     return [this.props.children];
   },
   render() {
-    const wrapperArgs = [{className: this.getClassName()}];
+    let wrapperArgs = [{className: this.getClassName()}];
     if (this.props.src) {
       wrapperArgs.push(this.renderLoader(ImageLoaderImg, this.getImgProps()));
     }
