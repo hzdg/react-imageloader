@@ -25,6 +25,7 @@ const createFactory = (cls) => (React.createFactory || id)(cls);
 
 const ImageLoaderImg = createFactory(React.createClass({
   displayName: 'ImageLoaderImage',
+
   getInitialState() {
     // We don't want to render the image on the server, because that will result
     // in the <img> tag being serialized the DOM causing the browser to start
@@ -42,10 +43,12 @@ const ImageLoaderImg = createFactory(React.createClass({
     // initial render on the client, but not the server).
     return {isInitialRender: true};
   },
+
   componentDidMount() {
     // FIXME: Is there a way to avoid setting state on mount?
     this.setState({isInitialRender: false});
   },
+
   handleLoad(...args) {
     if (!this.isMounted()) return;
     const image = this.refs.image;
@@ -56,9 +59,11 @@ const ImageLoaderImg = createFactory(React.createClass({
       this.props.onLoad(...args);
     }
   },
+
   handleError(...args) {
     if (this.props.onError) this.props.onError(...args);
   },
+
   renderImg() {
     const props = Object.assign({}, this.props, {
       ref: 'image',
@@ -67,6 +72,7 @@ const ImageLoaderImg = createFactory(React.createClass({
     });
     return <img {...props} />;
   },
+
   render() {
     if (this.state.isInitialRender) {
       // We will initially render the <img> tag in a <noscript> (see note in
@@ -97,15 +103,18 @@ const ImageLoader = React.createClass({
     wrapper: PropTypes.func,
     preloader: PropTypes.func,
   },
+
   getInitialState() {
     return {status: Status.PENDING};
   },
+
   getDefaultProps() {
     return {
       wrapper: span,
       loader: ImageLoaderImg,
     };
   },
+
   componentWillReceiveProps(nextProps) {
     if (this.props.src !== nextProps.src) {
       this.setState({
@@ -113,11 +122,13 @@ const ImageLoader = React.createClass({
       });
     }
   },
+
   getClassName() {
     let className = `imageloader ${this.state.status}`;
     if (this.props.className) className = `${className} ${this.props.className}`;
     return className;
   },
+
   getImgProps() {
     const props = Object.assign({}, this.props, {
       style: Object.assign({}, this.props.style, {
@@ -129,16 +140,20 @@ const ImageLoader = React.createClass({
     delete props.children;
     return props;
   },
+
   loaderDidLoad() {
     this.setState({status: Status.LOADED});
   },
+
   loaderDidError() {
     this.setState({status: Status.FAILED});
   },
+
   renderChildren() {
     if (Array.isArray(this.props.children)) return this.props.children.slice();
     return [this.props.children];
   },
+
   render() {
     let wrapperArgs = [{className: this.getClassName()}];
     if (this.props.src) {
