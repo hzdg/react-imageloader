@@ -1,9 +1,8 @@
 /* eslint-env mocha */
-import ReactImageLoader from '../src';
+import ImageLoader from '../src';
 import {assert} from 'chai';
 import React from 'react/addons';
 
-const ImageLoader = React.createFactory(ReactImageLoader);
 const {TestUtils} = React.addons;
 const nocache = (url) => `${url}?r=${Math.floor(Math.random() * Date.now() / 16)}`;
 function defer(fn) { setTimeout(fn, 0); }
