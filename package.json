@@ -39,7 +39,7 @@
     "gulp-connect": "^2.2.0",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
-    "open": "0.0.5",
+    "opn": "^2.0.1",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.0.11",
     "yargs": "^3.11.0"
