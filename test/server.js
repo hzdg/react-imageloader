@@ -21,7 +21,8 @@ const app = express()
   .get('/chai.js', (req, res) => { res.sendFile(path.join(__dirname, '../node_modules/chai/chai.js')); })
   .get('/mocha.js', (req, res) => { res.sendFile(path.join(__dirname, '../node_modules/mocha/mocha.js')); })
   .get('/mocha.css', (req, res) => { res.sendFile(path.join(__dirname, '../node_modules/mocha/mocha.css')); })
-  .use('/built', webpackMiddleware(webpack(webpackConfig), {stats: {colors: true}}));
+  .use('/built', webpackMiddleware(webpack(webpackConfig), {stats: {colors: true}}))
+  .use(express.static(path.join(__dirname)));
 
 app.listen(8080, err => {
   if (err) throw err;
