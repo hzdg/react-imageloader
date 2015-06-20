@@ -1,8 +1,9 @@
 /* eslint-env mocha */
+/* global chai */
 import ImageLoader from '../src';
-import {assert} from 'chai';
 import React from 'react/addons';
 
+const {assert} = chai;
 const {TestUtils} = React.addons;
 const nocache = (url) => `${url}?r=${Math.floor(Math.random() * Date.now() / 16)}`;
 function defer(fn) { setTimeout(fn, 0); }
