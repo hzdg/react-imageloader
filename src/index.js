@@ -16,6 +16,7 @@ export default React.createClass({
   propTypes: {
     wrapper: PropTypes.func,
     className: PropTypes.string,
+    preloader: PropTypes.func,
   },
 
   getInitialState() {
@@ -79,6 +80,10 @@ export default React.createClass({
 
       case Status.FAILED:
         if (this.props.children) wrapperArgs.push(this.props.children);
+        break;
+
+      default:
+        if (this.props.preloader) wrapperArgs.push(this.props.preloader());
         break;
     }
 
