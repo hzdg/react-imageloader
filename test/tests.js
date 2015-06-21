@@ -46,10 +46,9 @@ describe('ReactImageLoader', () => {
     try {
       await loadImage({src: nocache('fake.jpg')}, 'error');
     } catch (loader) {
-      const span = TestUtils.findRenderedDOMComponentWithTag(loader, 'span');
-      const textNodes = TestUtils.findAllInRenderedTree(span, (n) => TestUtils.isTextComponent(n));
-      assert.lengthOf(textNodes, 1, 'Expected one text node');
-      assert.equal(textNodes[0].props, 'error', 'Expected error message to be rendered');
+      const span = TestUtils.findRenderedDOMComponentWithClass(loader, 'failed');
+      assert.equal(span.props.children, 'error', 'Expected error message to be rendered');
+      assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'img'); });
       return;
     }
     throw new Error('Load should have failed!');
@@ -57,11 +56,12 @@ describe('ReactImageLoader', () => {
 
   it('shows alternative img node on error', async function() {
     try {
-      await loadImage({src: nocache('fake.jpg')}, <img />);
+      await loadImage({src: nocache('fake.jpg')}, <img src={'tiger.svg'} />);
     } catch (loader) {
-      const span = TestUtils.findRenderedDOMComponentWithTag(loader, 'span');
+      const span = TestUtils.findRenderedDOMComponentWithClass(loader, 'failed');
       const imgNodes = TestUtils.scryRenderedDOMComponentsWithTag(span, 'img');
-      assert.lengthOf(imgNodes, 2, 'Expected two img node');
+      assert.lengthOf(imgNodes, 1, 'Expected one img node');
+      assert.equal(imgNodes[0].props.src, 'tiger.svg');
       return;
     }
     throw new Error('Load should have failed!');

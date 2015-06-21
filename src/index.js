@@ -70,14 +70,18 @@ export default React.createClass({
   },
 
   render() {
-    let wrapperProps = [{className: this.getClassName()}];
+    let wrapperArgs = [{className: this.getClassName()}];
 
     switch (this.state.status) {
       case Status.LOADED:
-        wrapperProps.push(<img src={this.props.src} />);
+        wrapperArgs.push(<img src={this.props.src} />);
+        break;
+
+      case Status.FAILED:
+        if (this.props.children) wrapperArgs.push(this.props.children);
         break;
     }
 
-    return this.props.wrapper(...wrapperProps);
+    return this.props.wrapper(...wrapperArgs);
   },
 });
