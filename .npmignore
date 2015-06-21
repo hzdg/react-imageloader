@@ -3,5 +3,6 @@
 /vendor/
 /bower.json
 /.eslintrc
+/.babelrc
 /src/
 /standalone/
