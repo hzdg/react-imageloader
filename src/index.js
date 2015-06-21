@@ -70,12 +70,24 @@ export default React.createClass({
     if (this.props.onError) this.props.onError(error);
   },
 
+  renderImg() {
+    let props = Object.assign({}, this.props);
+
+    // Remove props used by ImageLoader.
+    // The assumption is that any other props are meant for the loaded image.
+    ['wrapper', 'className', 'preloader', 'children'].forEach(propName => {
+      delete props[propName];
+    });
+
+    return <img {...props} />;
+  },
+
   render() {
     let wrapperArgs = [{className: this.getClassName()}];
 
     switch (this.state.status) {
       case Status.LOADED:
-        wrapperArgs.push(<img src={this.props.src} />);
+        wrapperArgs.push(this.renderImg());
         break;
 
       case Status.FAILED:
