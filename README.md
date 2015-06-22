@@ -45,27 +45,24 @@ Props
     <tr>
       <td><code>preloader</code></td>
       <td>function</td>
-      <td>A React class or other function that returns a component instance to
-          be shown while the image loads.</td>
+      <td>An optional React component class or function that returns a React
+          element to be shown while the image loads.</td>
     </tr>
     <tr>
       <td><code>onLoad</code></td>
       <td>function</td>
-      <td>A handler for the React <code>React.DOM.img</code>
-          <code>onLoad</code> event.</td>
+      <td>An optional handler for the <code>[load]</code> event.</td>
     </tr>
     <tr>
       <td><code>onError</code></td>
       <td>function</td>
-      <td>A handler for the React <code>React.DOM.img</code>
-          <code>onError</code> event.</td>
+      <td>An optional handler for the <code>[error]</code> event.</td>
     </tr>
     <tr>
       <td><code>wrapper</code></td>
       <td>function</td>
-      <td>A React class or other function that returns a component instance to
-          be used as the wrapper component. Defaults to
-          <code>React.DOM.span</code>.</td>
+      <td>A React component class or function that returns a React element
+          to be used as the wrapper component. Defaults to <code>React.DOM.span</code>.</td>
     </tr>
   </tbody>
 </table>
@@ -73,3 +70,5 @@ Props
 
 [FOUC]: http://en.wikipedia.org/wiki/FOUC/
 [React]: http://facebook.github.io/react/
+[load]: https://developer.mozilla.org/en-US/docs/Web/Events/load
+[error]: https://developer.mozilla.org/en-US/docs/Web/Events/error
