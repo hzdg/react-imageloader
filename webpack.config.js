@@ -2,7 +2,7 @@ import path from 'path';
 import webpack from 'webpack';
 
 export default {
-  entry: path.join(__dirname, 'src', 'index.coffee'),
+  entry: path.join(__dirname, 'src', 'index.js'),
   output: {
     path: path.join(__dirname, 'standalone'),
     filename: 'react-imageloader.js',
@@ -13,7 +13,7 @@ export default {
   externals: ['React', {react: 'React'}],
   module: {
     loaders: [
-      {test: /\.coffee$/, loader: 'coffee'},
+      {test: /\.js$/, exclude: /node_modules/, loader: 'babel'},
     ],
   },
   plugins: [

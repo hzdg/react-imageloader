@@ -1,14 +1,15 @@
-# build\:node:
+build\:node:
+	babel src --out-dir lib
 
-# build\:browser:
-
-# build: build\:node build\:browser
+build\:browser:
+	babel-node ./node_modules/.bin/webpack --config ./webpack.config.js
 
 # bump:
 
-# test:
+test:
+	babel-node ./test/server.js
 
 dev:
 	babel-node ./test/server.js --open
 
-.PHONY: dev
+.PHONY: dev test build\:node build\:browser
