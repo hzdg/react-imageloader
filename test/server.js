@@ -13,7 +13,7 @@ const webpackConfig = {
   devtool: 'eval',
   entry: {tests: path.join(__dirname, 'tests.js')},
   output: {path: path.join(__dirname, 'built'), filename: '[name].js'},
-  module: {loaders: [{test: /\.js$/, exclude: /node_modules/, loader: 'babel'}]},
+  module: {loaders: [{test: /\.js$/, exclude: /node_modules/, loader: 'babel?stage=0&optional[]=runtime'}]},
 };
 
 const app = express()
