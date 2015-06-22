@@ -11,7 +11,7 @@ const Status = {
 };
 
 
-export default React.createClass({
+const ImageLoader = React.createClass({
   displayName: 'ImageLoader',
   propTypes: {
     wrapper: PropTypes.func,
@@ -85,13 +85,15 @@ export default React.createClass({
   },
 
   renderImg() {
-    let props = Object.assign({}, this.props);
-
-    // Remove props used by ImageLoader.
+    // Reduce props to just those not used by ImageLoader.
     // The assumption is that any other props are meant for the loaded image.
-    ['wrapper', 'className', 'preloader', 'children'].forEach(propName => {
-      delete props[propName];
-    });
+    const blacklist = Object.keys(ImageLoader.propTypes).concat('children');
+    let props = {};
+    for (let k in this.props) {
+      if (!this.props.hasOwnProperty(k)) continue;
+      if (blacklist.indexOf(k) >= 0) continue;
+      props[k] = this.props[k];
+    }
 
     return <img {...props} />;
   },
@@ -116,3 +118,5 @@ export default React.createClass({
     return this.props.wrapper(...wrapperArgs);
   },
 });
+
+export default ImageLoader;
