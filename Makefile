@@ -1,10 +1,19 @@
-build\:node:
+node:
 	babel src --out-dir lib
 
-build\:browser:
+browser:
 	babel-node ./node_modules/.bin/webpack --config ./webpack.config.js
 
-# bump:
+build: node browser
+
+major:
+	mversion major
+
+minor:
+	mversion minor
+
+patch:
+	mversion patch
 
 test:
 	babel-node ./test/server.js
@@ -12,4 +21,4 @@ test:
 dev:
 	babel-node ./test/server.js --open
 
-.PHONY: dev test build\:node build\:browser
+.PHONY: dev test major minor patch

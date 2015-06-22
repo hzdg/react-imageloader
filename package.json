@@ -4,7 +4,7 @@
   "description": "A React component for wrangling image loading",
   "main": "./lib/index.js",
   "scripts": {
-    "prepublish": "make build:node",
+    "prepublish": "make node",
     "test": "make test"
   },
   "repository": {
@@ -34,6 +34,7 @@
     "eslint-plugin-react": "^2.5.2",
     "express": "^4.12.4",
     "mocha": "^2.2.5",
+    "mversion": "^1.10.0",
     "node-libs-browser": "^0.5.2",
     "opn": "^2.0.1",
     "webpack": "^1.9.11",
