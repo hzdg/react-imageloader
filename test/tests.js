@@ -45,7 +45,7 @@ describe('ReactImageLoader', () => {
   it('shows alternative string on error', async function() {
     try {
       await loadImage({src: nocache('fake.jpg')}, 'error');
-    } catch (loader) {
+    } catch ({loader}) {
       const span = TestUtils.findRenderedDOMComponentWithClass(loader, 'failed');
       assert.equal(span.props.children, 'error', 'Expected error message to be rendered');
       assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'img'); });
@@ -57,7 +57,7 @@ describe('ReactImageLoader', () => {
   it('shows alternative img node on error', async function() {
     try {
       await loadImage({src: nocache('fake.jpg')}, <img src={'tiger.svg'} />);
-    } catch (loader) {
+    } catch ({loader}) {
       const span = TestUtils.findRenderedDOMComponentWithClass(loader, 'failed');
       const imgNodes = TestUtils.scryRenderedDOMComponentsWithTag(span, 'img');
       assert.lengthOf(imgNodes, 1, 'Expected one img node');
@@ -80,7 +80,7 @@ describe('ReactImageLoader', () => {
   it('removes a preloader when load fails', async function() {
     try {
       await loadImage({src: nocache('fake.jpg'), preloader: React.DOM.div});
-    } catch (loader) {
+    } catch ({loader}) {
       assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'div'); });
       return;
     }
@@ -110,7 +110,7 @@ describe('ReactImageLoader', () => {
     // Fail to load an image.
     try {
       await loadImage({src: nocache('fake.jpg')}, null, domEl);
-    } catch (loader) {
+    } catch ({loader}) {
       assert.throws(() => TestUtils.findRenderedDOMComponentWithTag(loader, 'img'));
     }
 
@@ -132,7 +132,7 @@ function loadImage(props, children, el) {
       <ImageLoader
         {...props}
         onLoad={() => { resolve(loader); }}
-        onError={() => { reject(loader); }}>
+        onError={error => { reject(Object.assign(error, {loader})); }}>
         {children}
       </ImageLoader>
     );
