@@ -38,42 +38,14 @@ React.render((
 Props
 -----
 
-<table>
-  <thead>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>src</code></td>
-      <td>string</td>
-      <td>The URL of the image to be loaded.</td>
-    </tr>
-    <tr>
-      <td><code>preloader</code></td>
-      <td>function</td>
-      <td>An optional React component class or function that returns a React
-          element to be shown while the image loads.</td>
-    </tr>
-    <tr>
-      <td><code>onLoad</code></td>
-      <td>function</td>
-      <td>An optional handler for the <code>[load]</code> event.</td>
-    </tr>
-    <tr>
-      <td><code>onError</code></td>
-      <td>function</td>
-      <td>An optional handler for the <code>[error]</code> event.</td>
-    </tr>
-    <tr>
-      <td><code>wrapper</code></td>
-      <td>function</td>
-      <td>A React component class or function that returns a React element
-          to be used as the wrapper component. Defaults to <code>React.DOM.span</code>.</td>
-    </tr>
-  </tbody>
-</table>
+Name        | Type     | Description
+------------|----------|------------
+`src`       | string   | The URL of the image to be loaded.
+`preloader` | function | An optional React component class or function that returns a React element to be shown while the image loads.
+`onLoad`    | function | An optional handler for the [load] event.
+`onError`   | function | An optional handler for the [error] event.
+`wrapper`   | function | A React component class or function that returns a React element to be used as the wrapper component. Defaults to `React.DOM.span`.
+
 
 Children
 --------
