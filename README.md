@@ -16,13 +16,21 @@ Usage
 -----
 
 ```javascript
-var ImageLoader = require('react-imageloader');
+import React from 'react';
+import ImageLoader from 'react-imageloader';
 
-// ...
+function preloader() {
+  return <img src="spinner.gif" />;
+}
 
-<ImageLoader src="/path/to/image.jpg">
-  Image load failed!
-</ImageLoader>
+React.render((
+  <ImageLoader
+    src="/path/to/image.jpg"
+    wrapper={div}
+    preloader={preloader}>
+    Image load failed!
+  </ImageLoader>
+), document.body);
 
 ```
 
