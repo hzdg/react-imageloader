@@ -75,6 +75,36 @@ Props
   </tbody>
 </table>
 
+Children
+--------
+
+Children passed to `ImageLoader` will be rendered *only if* the image fails to load. Children are essentially alternate content to show when the image is missing or unavailable.
+
+For example:
+
+```javascript
+
+React.createClass({
+  // This will only show if "notgonnaload.jpg" doesn't load.
+  errorMessage() {
+    return (
+      <div>
+        <h2>Something went wrong!</h2>
+        <p>Not gonna load "notgonnaload.jpg". bummer.</p>
+      </div>
+    );
+  },
+  render() {
+    return (
+      <ImageLoader src="notgonnaload.jpg">
+        {this.errorMessage()}
+      </ImageLoader>
+    );
+  }
+})
+
+```
+
 
 [FOUC]: http://en.wikipedia.org/wiki/FOUC/
 [React]: http://facebook.github.io/react/
