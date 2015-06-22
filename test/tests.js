@@ -94,12 +94,41 @@ describe('ReactImageLoader', () => {
     assert.equal(img.props.alt, 'this is alt text', 'Expected img to have alt text');
   });
 
+  it('removes a previous image when src changes', async function() {
+    const domEl = document.createElement('div');
+    const loader = await loadImage({src: nocache('tiger.svg')}, null, domEl);
+    assert.match(TestUtils.findRenderedDOMComponentWithTag(loader, 'img').props.src, /tiger\.svg/);
+
+    // Rerender with a different source.
+    loadImage(null, null, domEl).catch(() => {});
+    assert.throws(() => TestUtils.findRenderedDOMComponentWithTag(loader, 'img'));
+  });
+
+  it('recovers from an error to load a new image', async function() {
+    const domEl = document.createElement('div');
+
+    // Fail to load an image.
+    try {
+      await loadImage({src: nocache('fake.jpg')}, null, domEl);
+    } catch (loader) {
+      assert.throws(() => TestUtils.findRenderedDOMComponentWithTag(loader, 'img'));
+    }
+
+    // Rerender with a different source.
+    const loader = await loadImage({src: nocache('tiger.svg')}, null, domEl);
+    assert(() => TestUtils.findRenderedDOMComponentWithTag(loader, 'img'));
+  });
+
 });
 
 
-function loadImage(props, children) {
+function loadImage(props, children, el) {
+  let render;
+  if (el) render = reactElement => React.render(reactElement, el);
+  else render = TestUtils.renderIntoDocument;
+
   return new Promise((resolve, reject) => {
-    const loader = TestUtils.renderIntoDocument(
+    const loader = render(
       <ImageLoader
         {...props}
         onLoad={() => { resolve(loader); }}

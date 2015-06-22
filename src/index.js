@@ -33,6 +33,20 @@ export default React.createClass({
     }
   },
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.src !== nextProps.src) {
+      this.setState({
+        status: nextProps.src ? Status.LOADING : Status.PENDING,
+      });
+    }
+  },
+
+  componentDidUpdate() {
+    if (this.state.status === Status.LOADING && !this.loader) {
+      this.createLoader();
+    }
+  },
+
   getClassName() {
     let className = `imageloader ${this.state.status}`;
     if (this.props.className) className = `${className} ${this.props.className}`;
