@@ -47,6 +47,10 @@ const ImageLoader = React.createClass({
     }
   },
 
+  componentWillUnmount() {
+    this.destroyLoader();
+  },
+
   getClassName() {
     let className = `imageloader ${this.state.status}`;
     if (this.props.className) className = `${className} ${this.props.className}`;

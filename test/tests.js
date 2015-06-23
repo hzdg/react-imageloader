@@ -119,6 +119,23 @@ describe('ReactImageLoader', () => {
     assert(() => TestUtils.findRenderedDOMComponentWithTag(loader, 'img'));
   });
 
+  it('abandons a load when unmounted', done => {
+    const domEl = document.createElement('div');
+    const loader = React.render(<ImageLoader
+      src={nocache('tiger.svg')}
+      onLoad={() => { done(new Error('This load should have been abandoned!')); }}
+    />, domEl);
+
+    // Make sure that the image load isn't handled by ImageLoader.
+    loader.img.addEventListener('load', () => {
+      assert.throws(() => TestUtils.findRenderedDOMComponentWithTag(loader, 'img'));
+      done();
+    });
+
+    // Remove ImageLoader from the DOM.
+    React.render(<div />, domEl);
+  });
+
 });
 
 
