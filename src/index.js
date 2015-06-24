@@ -11,27 +11,27 @@ const Status = {
 };
 
 
-const ImageLoader = React.createClass({
-  displayName: 'ImageLoader',
-  propTypes: {
+export default class ImageLoader extends React.Component {
+  static propTypes = {
     wrapper: PropTypes.func,
     className: PropTypes.string,
     preloader: PropTypes.func,
-  },
+  };
 
-  getInitialState() {
-    return {status: this.props.src ? Status.LOADING : Status.PENDING};
-  },
+  static defaultProps = {
+    wrapper: span,
+  };
 
-  getDefaultProps() {
-    return {wrapper: span};
-  },
+  constructor(props) {
+    super(props);
+    this.state = {status: props.src ? Status.LOADING : Status.PENDING};
+  }
 
   componentDidMount() {
     if (this.state.status === Status.LOADING) {
       this.createLoader();
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.src !== nextProps.src) {
@@ -39,32 +39,32 @@ const ImageLoader = React.createClass({
         status: nextProps.src ? Status.LOADING : Status.PENDING,
       });
     }
-  },
+  }
 
   componentDidUpdate() {
     if (this.state.status === Status.LOADING && !this.loader) {
       this.createLoader();
     }
-  },
+  }
 
   componentWillUnmount() {
     this.destroyLoader();
-  },
+  }
 
   getClassName() {
     let className = `imageloader ${this.state.status}`;
     if (this.props.className) className = `${className} ${this.props.className}`;
     return className;
-  },
+  }
 
   createLoader() {
     this.destroyLoader();  // We can only have one loader at a time.
 
     this.img = new Image();
-    this.img.onload = this.handleLoad;
-    this.img.onerror = this.handleError;
+    this.img.onload = ::this.handleLoad;
+    this.img.onerror = ::this.handleError;
     this.img.src = this.props.src;
-  },
+  }
 
   destroyLoader() {
     if (this.img) {
@@ -72,21 +72,21 @@ const ImageLoader = React.createClass({
       this.img.onerror = null;
       this.img = null;
     }
-  },
+  }
 
   handleLoad(event) {
     this.destroyLoader();
     this.setState({status: Status.LOADED});
 
     if (this.props.onLoad) this.props.onLoad(event);
-  },
+  }
 
   handleError(error) {
     this.destroyLoader();
     this.setState({status: Status.FAILED});
 
     if (this.props.onError) this.props.onError(error);
-  },
+  }
 
   renderImg() {
     // Reduce props to just those not used by ImageLoader.
@@ -100,7 +100,7 @@ const ImageLoader = React.createClass({
     }
 
     return <img {...props} />;
-  },
+  }
 
   render() {
     let wrapperArgs = [{className: this.getClassName()}];
@@ -120,7 +120,5 @@ const ImageLoader = React.createClass({
     }
 
     return this.props.wrapper(...wrapperArgs);
-  },
-});
-
-export default ImageLoader;
+  }
+}
