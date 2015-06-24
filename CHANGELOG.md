@@ -1,3 +1,10 @@
+## 2.0.0
+
+* :construction: Rewrite in ES6(+)
+* Assume React >= 0.13
+* Remove dependency on react-loadermixin
+* Do loading off DOM, using a JS `Image()` instead of a React `<img />`
+
 ## 1.2.0
 
 * Show preloader only while loading
