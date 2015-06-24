@@ -28,13 +28,13 @@ describe('ReactImageLoader', () => {
     const loader = TestUtils.renderIntoDocument(<ImageLoader className="test value" />);
     assert(TestUtils.findRenderedDOMComponentWithClass(loader, 'pending'));
     assert.throws(() => { TestUtils.findRenderedDOMComponentWithClass(loader, 'loading'); });
-    assert.equal(loader.getDOMNode().childElementCount, 0, 'Expected wrapper to have no children');
+    assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'img'); });
   });
 
   it('does not render the image initially', () => {
     const loader = TestUtils.renderIntoDocument(<ImageLoader className="test value" src="fake.jpg" />);
     assert(TestUtils.findRenderedDOMComponentWithClass(loader, 'loading'));
-    assert.equal(loader.getDOMNode().childElementCount, 0, 'Expected wrapper to have no children');
+    assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'img'); });
   });
 
   it('renders the image when load completes', async function() {
