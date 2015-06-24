@@ -61,16 +61,16 @@ const ImageLoader = React.createClass({
     this.destroyLoader();  // We can only have one loader at a time.
 
     this.img = new Image();
-    this.img.addEventListener('load', this.handleLoad);
-    this.img.addEventListener('error', this.handleError);
+    this.img.onload = this.handleLoad;
+    this.img.onerror = this.handleError;
     this.img.src = this.props.src;
   },
 
   destroyLoader() {
     if (this.img) {
-      this.img.removeEventListener('load', this.handleLoad);
-      this.img.removeEventListener('error', this.handleError);
-      delete this.img;
+      this.img.onload = null;
+      this.img.onerror = null;
+      this.img = null;
     }
   },
 
