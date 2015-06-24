@@ -13,7 +13,7 @@ export default {
   externals: ['React', {react: 'React'}],
   module: {
     loaders: [
-      {test: /\.js$/, exclude: /node_modules/, loader: 'babel'},
+      {test: /\.js$/, exclude: /node_modules/, loader: 'babel?stage=0'},
     ],
   },
   plugins: [
