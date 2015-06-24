@@ -33,6 +33,7 @@
     "eslint": "^0.23.0",
     "eslint-plugin-react": "^2.5.2",
     "express": "^4.12.4",
+    "git-release-notes": "0.0.2",
     "mocha": "^2.2.5",
     "mversion": "^1.10.0",
     "node-libs-browser": "^0.5.2",

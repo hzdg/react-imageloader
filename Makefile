@@ -6,6 +6,12 @@ browser:
 
 build: node browser
 
+test:
+	babel-node ./test/server.js
+
+dev:
+	babel-node ./test/server.js --open
+
 major:
 	mversion major
 
@@ -15,10 +21,13 @@ minor:
 patch:
 	mversion patch
 
-test:
-	babel-node ./test/server.js
+changelog.template.ejs:
+	@echo "## x.x.x\n\n<% commits.forEach(function(commit) { -%>\n* <%= commit.title %>\n<% }) -%>" > changelog.template.ejs
 
-dev:
-	babel-node ./test/server.js --open
+changelog: changelog.template.ejs
+	@git-release-notes $$(git describe --abbrev=0)..HEAD $< | cat - CHANGELOG.md >> CHANGELOG.md.new
+	@mv CHANGELOG.md{.new,}
+	@rm changelog.template.ejs
+	@echo "Added changes since $$(git describe --abbrev=0) to CHANGELOG.md"
 
-.PHONY: dev test major minor patch
+.PHONY: dev test changelog major minor patch
