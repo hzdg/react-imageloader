@@ -19,8 +19,5 @@
     "node_modules",
     "vendor",
     "test"
-  ],
-  "devDependencies": {
-    "react": "~0.12.0"
-  }
+  ]
 }
