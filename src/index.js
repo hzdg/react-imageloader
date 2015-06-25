@@ -42,7 +42,7 @@ export default class ImageLoader extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.status === Status.LOADING && !this.loader) {
+    if (this.state.status === Status.LOADING && !this.img) {
       this.createLoader();
     }
   }
