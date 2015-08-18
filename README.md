@@ -26,7 +26,7 @@ function preloader() {
 React.render((
   <ImageLoader
     src="/path/to/image.jpg"
-    wrapper={div}
+    wrapper={React.DOM.div}
     preloader={preloader}>
     Image load failed!
   </ImageLoader>
