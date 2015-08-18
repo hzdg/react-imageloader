@@ -87,7 +87,7 @@ If you are upgrading to the 2.x version, there are a couple of changes you shoul
 * Loading is done 'off DOM' in a JavaScript `Image()` (instead of hidden in the DOM via a React `<img />`), so values passed to the `onLoad` and `onError` callbacks will be the browser native values, not React's synthesized values. This should't be a problem for the vast majority of use cases, but it is *technically* an API change.
 
 
-[FOUC]: http://en.wikipedia.org/wiki/FOUC/
+[FOUC]: http://en.wikipedia.org/wiki/FOUC
 [React]: http://facebook.github.io/react/
 [load]: https://developer.mozilla.org/en-US/docs/Web/Events/load
 [error]: https://developer.mozilla.org/en-US/docs/Web/Events/error
