@@ -1,3 +1,8 @@
+## 2.1.0
+
+* Add `imgProps` prop
+* Add a `style` prop for the `wrapper`
+
 ## 2.0.0
 
 * :construction: Rewrite in ES6(+)
