@@ -20,6 +20,7 @@ export default class ImageLoader extends React.Component {
     src: PropTypes.string,
     onLoad: PropTypes.func,
     onError: PropTypes.func,
+    imgProps: PropTypes.object,
   };
 
   static defaultProps = {
@@ -93,14 +94,13 @@ export default class ImageLoader extends React.Component {
   }
 
   renderImg() {
-    // Reduce props to just those not used by ImageLoader.
-    // The assumption is that any other props are meant for the loaded image.
-    const blacklist = Object.keys(ImageLoader.propTypes).concat('children');
-    let props = {};
-    for (let k in this.props) {
-      if (!this.props.hasOwnProperty(k)) continue;
-      if (blacklist.indexOf(k) >= 0) continue;
-      props[k] = this.props[k];
+    const {src, imgProps} = this.props;
+    let props = {src};
+
+    for (let k in imgProps) {
+      if (imgProps.hasOwnProperty(k)) {
+        props[k] = imgProps[k];
+      }
     }
 
     return <img {...props} />;

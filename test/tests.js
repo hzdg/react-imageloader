@@ -100,10 +100,13 @@ describe('ReactImageLoader', () => {
     throw new Error('Load should have failed!');
   });
 
-  it('transfers img props to the underlying img element', async function() {
-    const loader = await loadImage({src: nocache('tiger.svg'), alt: 'this is alt text'});
+  it('transfers `imgProps` to the underlying img element', async function() {
+    const src = nocache('tiger.svg');
+    const loader = await loadImage({src, imgProps: {alt: 'alt text', className: 'test'}});
     const img = TestUtils.findRenderedDOMComponentWithTag(loader, 'img');
-    assert.equal(img.props.alt, 'this is alt text', 'Expected img to have alt text');
+    assert.equal(img.props.src, src, `Expected img to have src ${src}`);
+    assert.equal(img.props.alt, 'alt text', 'Expected img to have alt text');
+    assert.equal(img.props.className, 'test', 'Expected img to have className');
   });
 
   it('removes a previous image when src changes', async function() {
