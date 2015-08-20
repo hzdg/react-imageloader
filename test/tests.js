@@ -101,9 +101,8 @@ describe('ReactImageLoader', () => {
   });
 
   it('transfers img props to the underlying img element', async function() {
-    const loader = await loadImage({src: nocache('tiger.svg'), alt: 'this is alt text', style: {width: 100}});
+    const loader = await loadImage({src: nocache('tiger.svg'), alt: 'this is alt text'});
     const img = TestUtils.findRenderedDOMComponentWithTag(loader, 'img');
-    assert.equal(img.props.style.width, 100, 'Expected img width to be 100');
     assert.equal(img.props.alt, 'this is alt text', 'Expected img to have alt text');
   });
 
