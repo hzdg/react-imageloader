@@ -45,6 +45,7 @@ Name        | Type     | Description
 `onLoad`    | function | An optional handler for the [load] event.
 `onError`   | function | An optional handler for the [error] event.
 `wrapper`   | function | A React component class or function that returns a React element to be used as the wrapper component. Defaults to `React.DOM.span`.
+`style`     | object   | An optional object containing styles to be applied to the component.
 
 
 Children
