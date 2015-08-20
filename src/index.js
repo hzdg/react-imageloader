@@ -17,6 +17,9 @@ export default class ImageLoader extends React.Component {
     className: PropTypes.string,
     style: PropTypes.object,
     preloader: PropTypes.func,
+    src: PropTypes.string,
+    onLoad: PropTypes.func,
+    onError: PropTypes.func,
   };
 
   static defaultProps = {
@@ -105,7 +108,7 @@ export default class ImageLoader extends React.Component {
 
   render() {
     let wrapperProps = {
-      className: this.getClassName()
+      className: this.getClassName(),
     };
 
     if (this.props.style) {
