@@ -24,6 +24,19 @@ describe('ReactImageLoader', () => {
     assert(TestUtils.findRenderedDOMComponentWithTag(loader, 'div'));
   });
 
+  it('gives the wrapper a custom style object', () => {
+    const loader = TestUtils.renderIntoDocument(<ImageLoader style={{display: 'block', position: 'absolute', top: '50%', left: '50%', marginTop: '-50px', marginLeft: '-50px', width: '123px', height: '246px'}} />);
+    const wrapper = TestUtils.findRenderedDOMComponentWithTag(loader, 'span');
+    assert.equal(wrapper.props.style.display, 'block', 'Expected span to be set to `display: block`');
+    assert.equal(wrapper.props.style.position, 'absolute', 'Expected position to be `absolute`');
+    assert.equal(wrapper.props.style.top, '50%', 'Expected to be positioned at 50% from top boundary');
+    assert.equal(wrapper.props.style.left, '50%', 'Expected to be positioned at 50% from left boundary');
+    assert.equal(wrapper.props.style.marginTop, '-50px', 'Expected top margin to be -50px');
+    assert.equal(wrapper.props.style.marginLeft, '-50px', 'Expected left margin to be -50px');
+    assert.equal(wrapper.props.style.width, '123px', 'Expected width to be 123px');
+    assert.equal(wrapper.props.style.height, '246px', 'Expected height to be 246px');
+  });
+
   it('does not render the image without a src', () => {
     const loader = TestUtils.renderIntoDocument(<ImageLoader className="test value" />);
     assert(TestUtils.findRenderedDOMComponentWithClass(loader, 'pending'));
