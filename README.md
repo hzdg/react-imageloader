@@ -40,13 +40,14 @@ Props
 
 Name        | Type     | Description
 ------------|----------|------------
-`src`       | string   | The URL of the image to be loaded.
-`wrapper`   | function | An optional function that returns a React element to wrap the ImageLoader in.
-`preloader` | function | An optional function that returns a React element to be shown while the image loads.
-`onLoad`    | function | An optional handler for the [load] event.
+`className` | string   | An optional class name for the `wrapper` component.
+`imgProps`  | object   | An optional object containing props for the underlying `img` component.
 `onError`   | function | An optional handler for the [error] event.
-`wrapper`   | function | A React component class or function that returns a React element to be used as the wrapper component. Defaults to `React.DOM.span`.
-`style`     | object   | An optional object containing styles to be applied to the component.
+`onLoad`    | function | An optional handler for the [load] event.
+`preloader` | function | An optional function that returns a React element to be shown while the image loads.
+`src`       | string   | The URL of the image to be loaded.
+`style`     | object   | An optional object containing styles for the `wrapper` component.
+`wrapper`   | function | A function that takes a props argument and returns a React element to be used as the wrapper component. Defaults to `React.DOM.span`.
 
 
 Children
