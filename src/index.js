@@ -73,6 +73,7 @@ export default class ImageLoader extends React.Component {
 
   destroyLoader() {
     if (this.img) {
+      this.img.src = '';
       this.img.onload = null;
       this.img.onerror = null;
       this.img = null;
