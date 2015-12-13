@@ -10,7 +10,7 @@ export default {
     libraryTarget: 'umd',
     target: 'web',
   },
-  externals: ['React', {react: 'React'}],
+  externals: ['react', {react: 'React'}],
   module: {
     loaders: [
       {test: /\.js$/, exclude: /node_modules/, loader: 'babel?stage=0'},
