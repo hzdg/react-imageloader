@@ -29,7 +29,10 @@ export default class ImageLoader extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {status: props.src ? Status.LOADING : Status.PENDING};
+    this.state = {
+      status: props.src ? Status.LOADING : Status.PENDING,
+      progress: 0,
+    };
   }
 
   componentDidMount() {
@@ -67,6 +70,9 @@ export default class ImageLoader extends React.Component {
 
     this.img = new Image();
     this.img.onload = ::this.handleLoad;
+    this.img.onloadstart = ::this.handleProgressStart;
+    this.img.onprogress = ::this.handleProgress;
+    this.img.onloadend = ::this.handleProgressEnd;
     this.img.onerror = ::this.handleError;
     this.img.src = this.props.src;
   }
@@ -74,6 +80,9 @@ export default class ImageLoader extends React.Component {
   destroyLoader() {
     if (this.img) {
       this.img.onload = null;
+      this.img.onloadstart = null;
+      this.img.onprogress = null;
+      this.img.onloadend = null;
       this.img.onerror = null;
       this.img = null;
     }
@@ -81,9 +90,26 @@ export default class ImageLoader extends React.Component {
 
   handleLoad(event) {
     this.destroyLoader();
-    this.setState({status: Status.LOADED});
+    this.setState({status: Status.LOADED, progress: 1});
 
     if (this.props.onLoad) this.props.onLoad(event);
+  }
+
+  handleProgress(event) {
+    if (event.lengthComputable) {
+      return;
+    }
+    const progress = (event.loaded / event.total).toFixed(2);
+
+    this.setState({progress});
+  }
+
+  handleProgressStart() {
+    this.setState({progress: 0});
+  }
+
+  handleProgressEnd() {
+    this.setState({progress: 1});
   }
 
   handleError(error) {
@@ -127,7 +153,7 @@ export default class ImageLoader extends React.Component {
         break;
 
       default:
-        if (this.props.preloader) wrapperArgs.push(this.props.preloader());
+        if (this.props.preloader) wrapperArgs.push(this.props.preloader(this.state.progress));
         break;
     }
 
