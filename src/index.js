@@ -29,7 +29,11 @@ export default class ImageLoader extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {status: props.src ? Status.LOADING : Status.PENDING};
+    this.state = {
+      status: props.src ? Status.LOADING : Status.PENDING,
+      imageSrc: props.src,
+      progress: 0,
+    };
   }
 
   componentDidMount() {
@@ -47,7 +51,7 @@ export default class ImageLoader extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.status === Status.LOADING && !this.img) {
+    if (this.state.status === Status.LOADING && !this.request) {
       this.createLoader();
     }
   }
@@ -65,25 +69,56 @@ export default class ImageLoader extends React.Component {
   createLoader() {
     this.destroyLoader();  // We can only have one loader at a time.
 
-    this.img = new Image();
-    this.img.onload = ::this.handleLoad;
-    this.img.onerror = ::this.handleError;
-    this.img.src = this.props.src;
+    this.request = new XMLHttpRequest();
+    this.request.onloadstart = ::this.handleProgressStart;
+    this.request.onprogress = ::this.handleProgress;
+    this.request.onloadend = ::this.handleProgressEnd;
+    this.request.onload = ::this.handleLoad;
+    this.request.open('GET', this.props.src, true);
+    this.request.withCredentials = true;
+    this.request.responseType = 'blob';
+    this.request.send(null);
   }
 
   destroyLoader() {
-    if (this.img) {
-      this.img.onload = null;
-      this.img.onerror = null;
-      this.img = null;
+    if (this.request) {
+      this.request.onloadstart = null;
+      this.request.onprogress = null;
+      this.request.onloadend = null;
+      this.request.onload = null;
+      this.request = null;
     }
   }
 
   handleLoad(event) {
-    this.destroyLoader();
-    this.setState({status: Status.LOADED});
+    const response = event.target;
+    const imageSrc = typeof window !== 'undefined' ?
+      window.URL.createObjectURL(this.request.response) : this.props.src;
 
+    if (response.readyState !== 4 || response.status < 200 || response.status > 300) {
+      return this.handleError(response);
+    }
+
+    this.setState({status: Status.LOADED, progress: 1, imageSrc});
     if (this.props.onLoad) this.props.onLoad(event);
+    this.destroyLoader();
+  }
+
+  handleProgress({lengthComputable, loaded, total}) {
+    if (lengthComputable) {
+      return;
+    }
+    const progress = (loaded / total).toFixed(2);
+
+    this.setState({progress});
+  }
+
+  handleProgressStart() {
+    this.setState({progress: 0});
+  }
+
+  handleProgressEnd() {
+    this.setState({progress: 1});
   }
 
   handleError(error) {
@@ -94,8 +129,9 @@ export default class ImageLoader extends React.Component {
   }
 
   renderImg() {
-    const {src, imgProps} = this.props;
-    let props = {src};
+    const {imgProps} = this.props;
+    const {imageSrc} = this.state;
+    let props = {src: imageSrc};
 
     for (let k in imgProps) {
       if (imgProps.hasOwnProperty(k)) {
@@ -127,7 +163,7 @@ export default class ImageLoader extends React.Component {
         break;
 
       default:
-        if (this.props.preloader) wrapperArgs.push(this.props.preloader());
+        if (this.props.preloader) wrapperArgs.push(this.props.preloader(this.state.progress));
         break;
     }
 

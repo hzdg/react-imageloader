@@ -1,16 +1,16 @@
 node:
-	babel --stage=0 src --out-dir lib
+	./node_modules/.bin/babel --stage=0 src --out-dir lib
 
 browser:
-	babel-node ./node_modules/.bin/webpack --config ./webpack.config.js
+	./node_modules/.bin/babel-node ./node_modules/.bin/webpack --config ./webpack.config.js
 
 build: node browser
 
 test:
-	babel-node ./test/server.js
+	./node_modules/.bin/babel-node ./test/server.js
 
 dev:
-	babel-node ./test/server.js --open
+	./node_modules/.bin/babel-node ./test/server.js --open
 
 major:
 	mversion major

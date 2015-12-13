@@ -85,6 +85,11 @@ describe('ReactImageLoader', () => {
     assert(TestUtils.findRenderedDOMComponentWithTag(loader, 'div'));
   });
 
+  it('calls progress function with progress value as first argument if provided', async function() {
+    const preloader = (progress) => { assert.equal(progress, 0, 'Expected progress value as an argument'); };
+    await loadImage({src: nocache('tiger.svg'), preloader});
+  });
+
   it('removes a preloader when load completes', async function() {
     const loader = await loadImage({src: nocache('tiger.svg'), preloader: React.DOM.div});
     assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'div'); });
@@ -142,7 +147,7 @@ describe('ReactImageLoader', () => {
     />, domEl);
 
     // Make sure that the image load isn't handled by ImageLoader.
-    loader.img.addEventListener('load', () => {
+    loader.request.addEventListener('load', () => {
       assert.throws(() => TestUtils.findRenderedDOMComponentWithTag(loader, 'img'));
       done();
     });
