@@ -147,7 +147,7 @@ describe('ReactImageLoader', () => {
     />, domEl);
 
     // Make sure that the image load isn't handled by ImageLoader.
-    loader.img.addEventListener('load', () => {
+    loader.request.addEventListener('load', () => {
       assert.throws(() => TestUtils.findRenderedDOMComponentWithTag(loader, 'img'));
       done();
     });
