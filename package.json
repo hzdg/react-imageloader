@@ -3,8 +3,11 @@
   "version": "2.1.0",
   "description": "A React component for wrangling image loading",
   "main": "./lib/index.js",
+  "typings": "./index.d.ts",
   "scripts": {
-    "prepublish": "make node",
+    "tslint": "tslint \"**/*.ts\" -e \"node_modules/**\" -e \"typings/**\"",
+    "prepublish": "make node && typings install",
+    "publish": "npm -s run tslint && echo please publish to typings/registry",
     "test": "make test"
   },
   "repository": {
@@ -38,6 +41,8 @@
     "mversion": "^1.10.0",
     "node-libs-browser": "^0.5.2",
     "opn": "^2.0.1",
+    "tslint": "^3.8.1",
+    "typings": "^0.8.1",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.0.11",
     "yargs": "^3.11.0"
