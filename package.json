@@ -7,7 +7,7 @@
   "scripts": {
     "tslint": "tslint \"**/*.ts\" -e \"node_modules/**\" -e \"typings/**\"",
     "prepublish": "make node && typings install",
-    "publish": "npm -s run tslint && echo please publish to typings/registry",
+    "publish": "npm -s run tslint",
     "test": "make test"
   },
   "repository": {
