@@ -50,6 +50,39 @@ describe('ReactImageLoader', () => {
     assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'img'); });
   });
 
+  describe('triggering image loading via props', () => {
+    it('triggers the loading by default', () => {
+      const loader = TestUtils.renderIntoDocument(<ImageLoader className="test value" src="fake.jpg" />);
+      assert(TestUtils.findRenderedDOMComponentWithClass(loader, 'loading'));
+      assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'img'); });
+    });
+
+    it('status is pending if triggered is false', () => {
+      let triggered = false;
+
+      const domEl = document.createElement('div');
+      const loader = React.render(
+        <ImageLoader className="test value" src="fake.jpg" triggered={triggered} />,
+        domEl
+      );
+
+      assert(TestUtils.findRenderedDOMComponentWithClass(loader, 'pending'));
+    });
+
+    it('status will load if triggered is true', () => {
+      let triggered = true;
+
+      const domEl = document.createElement('div');
+      const loader = React.render(
+        <ImageLoader className="test value" src="fake.jpg" triggered={triggered} />,
+        domEl
+      );
+
+      assert(TestUtils.findRenderedDOMComponentWithClass(loader, 'loading'));
+      assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'img'); });
+    });
+  });
+
   it('renders the image when load completes', async function() {
     const loader = await loadImage({src: nocache('tiger.svg')});
     assert(TestUtils.findRenderedDOMComponentWithTag(loader, 'img'));

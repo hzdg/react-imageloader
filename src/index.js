@@ -10,7 +10,6 @@ const Status = {
   FAILED: 'failed',
 };
 
-
 export default class ImageLoader extends React.Component {
   static propTypes = {
     wrapper: PropTypes.func,
@@ -21,15 +20,19 @@ export default class ImageLoader extends React.Component {
     onLoad: PropTypes.func,
     onError: PropTypes.func,
     imgProps: PropTypes.object,
+    triggered: PropTypes.bool,
   };
 
   static defaultProps = {
     wrapper: span,
+    triggered: true,
   };
 
   constructor(props) {
     super(props);
-    this.state = {status: props.src ? Status.LOADING : Status.PENDING};
+    this.state = {
+      status: this.getStatus(),
+    };
   }
 
   componentDidMount() {
@@ -43,6 +46,10 @@ export default class ImageLoader extends React.Component {
       this.setState({
         status: nextProps.src ? Status.LOADING : Status.PENDING,
       });
+    } else if (this.props.triggered !== nextProps.triggered) {
+      this.setState({
+        status: this.getStatus(nextProps),
+      });
     }
   }
 
@@ -54,6 +61,11 @@ export default class ImageLoader extends React.Component {
 
   componentWillUnmount() {
     this.destroyLoader();
+  }
+
+  getStatus(props = this.props) {
+    const {src, triggered} = props;
+    return src && triggered ? Status.LOADING : Status.PENDING;
   }
 
   getClassName() {
