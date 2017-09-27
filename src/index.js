@@ -1,7 +1,6 @@
 import React from 'react';
 
 const {PropTypes} = React;
-const {span} = React.DOM;
 
 const Status = {
   PENDING: 'pending',
@@ -24,7 +23,7 @@ export default class ImageLoader extends React.Component {
   };
 
   static defaultProps = {
-    wrapper: span,
+    wrapper: React.createFactory('span'),
   };
 
   constructor(props) {
