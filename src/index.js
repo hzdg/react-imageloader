@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-
-const {span} = React.DOM;
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 const Status = {
   PENDING: 'pending',
@@ -24,7 +23,7 @@ export default class ImageLoader extends React.Component {
   };
 
   static defaultProps = {
-    wrapper: span,
+    wrapper: ReactDOM.span,
   };
 
   constructor(props) {
