@@ -1,3 +1,10 @@
+## 3.0.0
+
+* Assume React >= 15
+* React compatibility fixes (`PropTypes`, `React.createFactory`)
+* Pass image dimensions as props to `wrapper`
+* Cancel pending image request when destroyed
+
 ## 2.1.0
 
 * Add `imgProps` prop

@@ -1,6 +1,24 @@
 react-imageloader
 =================
 
+🚨 This project is not maintained! 🚨
+
+We are no longer using this component in our day-to-day work, so unfortunately,
+we have neglected maintenance of it for quite some time. Among the reasons
+why we haven't been using this component are:
+
+  - It has [some design flaws](#design-decisions-mistakes)
+  - We've been more focus on react-native
+
+However, it may still work for you. If you are looking for something like
+this, but don't want to take on an unmaintained dependency, check out
+[this fork](https://github.com/DeedMob/react-load-image).
+
+See the [support matrix](#supported-versions-of-react) below
+if you are determined to use this.
+
+---
+
 One of the hardest things to wrangle in the browser is loading. When images and
 other linked elements appear in the DOM, the browser makes decisions on when to
 load them that sometimes result in problems for a site and its users, such as
@@ -80,15 +98,23 @@ React.createClass({
 
 ```
 
+Design Decisions (mistakes?)
+----------------------------
+Since v2.0, loading is done 'off DOM' in a JavaScript `Image()` (instead of
+hidden in the DOM via a React `<img />`), so values passed to the `onLoad`
+and `onError` callbacks will be the browser native values, not React's
+synthesized values. While this shouldn't be a problem for the vast majority
+of use cases, it can cause weirdness when browser caching is disabled
+(i.e., images loading twice, preloaders disappearing before the image is ready).
 
-Upgrading to 2.x
-----------------
+Supported versions of React
+---------------------------
 
-If you are upgrading to the 2.x version, there are a couple of changes you should be aware of:
-
-* Since 2.0, `ImageLoader` requires **React >= 0.13**
-* Loading is done 'off DOM' in a JavaScript `Image()` (instead of hidden in the DOM via a React `<img />`), so values passed to the `onLoad` and `onError` callbacks will be the browser native values, not React's synthesized values. This should't be a problem for the vast majority of use cases, but it is *technically* an API change.
-
+React        | ImageLoader
+-------------|------------
+ <0.13       | 1.x
+ >=0.13, <15 | 2.x
+ >=15        | 3.x
 
 [FOUC]: http://en.wikipedia.org/wiki/FOUC
 [React]: http://facebook.github.io/react/
