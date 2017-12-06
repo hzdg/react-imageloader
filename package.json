@@ -1,6 +1,6 @@
 {
   "name": "react-imageloader",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "A React component for wrangling image loading",
   "main": "./lib/index.js",
   "scripts": {
@@ -24,10 +24,12 @@
   },
   "homepage": "https://github.com/hzdg/react-imageloader",
   "devDependencies": {
-    "babel": "^5.5.8",
+    "babel-cli": "^6.26.0",
     "babel-core": "^5.5.8",
     "babel-eslint": "^3.1.16",
     "babel-loader": "^5.1.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
     "babel-runtime": "^5.5.8",
     "chai": "^3.0.0",
     "eslint": "^0.23.0",
@@ -43,7 +45,9 @@
     "yargs": "^3.11.0"
   },
   "peerDependencies": {
-    "react": ">=0.13"
+    "prop-types": ">=15.0.0",
+    "react": ">=15.0.0",
+    "react-dom": ">=15.0.0"
   },
   "dependencies": {}
 }
