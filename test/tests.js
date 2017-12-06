@@ -1,10 +1,11 @@
 /* eslint-env mocha */
 /* global chai */
 import ImageLoader from '../src';
-import React from 'react/addons';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TestUtils from 'react-dom/test-utils';
 
 const {assert} = chai;
-const {TestUtils} = React.addons;
 const nocache = (url) => `${url}?r=${Math.floor(Math.random() * Date.now() / 16)}`;
 
 
@@ -20,13 +21,13 @@ describe('ReactImageLoader', () => {
   it('uses a custom wrapper', () => {
     let loader = TestUtils.renderIntoDocument(<ImageLoader />);
     assert(TestUtils.findRenderedDOMComponentWithTag(loader, 'span'));
-    loader = TestUtils.renderIntoDocument(<ImageLoader wrapper={React.DOM.div} />);
+    loader = TestUtils.renderIntoDocument(<ImageLoader wrapper={React.createFactory('div')} />);
     assert(TestUtils.findRenderedDOMComponentWithTag(loader, 'div'));
   });
 
   it('gives the wrapper a custom style object', () => {
     const loader = TestUtils.renderIntoDocument(<ImageLoader style={{display: 'block', position: 'absolute', top: '50%', left: '50%', marginTop: '-50px', marginLeft: '-50px', width: '123px', height: '246px'}} />);
-    const wrapper = TestUtils.findRenderedDOMComponentWithTag(loader, 'span');
+    const wrapper = TestUtils.findRenderedComponentWithType(loader, ImageLoader);
     assert.equal(wrapper.props.style.display, 'block', 'Expected span to be set to `display: block`');
     assert.equal(wrapper.props.style.position, 'absolute', 'Expected position to be `absolute`');
     assert.equal(wrapper.props.style.top, '50%', 'Expected to be positioned at 50% from top boundary');
@@ -59,7 +60,7 @@ describe('ReactImageLoader', () => {
     try {
       await loadImage({src: nocache('fake.jpg')}, 'error');
     } catch ({loader}) {
-      const span = TestUtils.findRenderedDOMComponentWithClass(loader, 'failed');
+      const span = TestUtils.findRenderedComponentWithType(loader, ImageLoader);
       assert.equal(span.props.children, 'error', 'Expected error message to be rendered');
       assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'img'); });
       return;
@@ -71,28 +72,28 @@ describe('ReactImageLoader', () => {
     try {
       await loadImage({src: nocache('fake.jpg')}, <img src={'tiger.svg'} />);
     } catch ({loader}) {
-      const span = TestUtils.findRenderedDOMComponentWithClass(loader, 'failed');
+      const span = TestUtils.findRenderedComponentWithType(loader, ImageLoader);
       const imgNodes = TestUtils.scryRenderedDOMComponentsWithTag(span, 'img');
       assert.lengthOf(imgNodes, 1, 'Expected one img node');
-      assert.equal(imgNodes[0].props.src, 'tiger.svg');
+      assert.include(imgNodes[0].src, 'tiger.svg');
       return;
     }
     throw new Error('Load should have failed!');
   });
 
   it('shows a preloader if provided', () => {
-    const loader = TestUtils.renderIntoDocument(<ImageLoader preloader={React.DOM.div} />);
+    const loader = TestUtils.renderIntoDocument(<ImageLoader preloader={React.createFactory('div')} />);
     assert(TestUtils.findRenderedDOMComponentWithTag(loader, 'div'));
   });
 
   it('removes a preloader when load completes', async function() {
-    const loader = await loadImage({src: nocache('tiger.svg'), preloader: React.DOM.div});
+    const loader = await loadImage({src: nocache('tiger.svg'), preloader: React.createFactory('div')});
     assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'div'); });
   });
 
   it('removes a preloader when load fails', async function() {
     try {
-      await loadImage({src: nocache('fake.jpg'), preloader: React.DOM.div});
+      await loadImage({src: nocache('fake.jpg'), preloader: React.createFactory('div')});
     } catch ({loader}) {
       assert.throws(() => { TestUtils.findRenderedDOMComponentWithTag(loader, 'div'); });
       return;
@@ -104,15 +105,15 @@ describe('ReactImageLoader', () => {
     const src = nocache('tiger.svg');
     const loader = await loadImage({src, imgProps: {alt: 'alt text', className: 'test'}});
     const img = TestUtils.findRenderedDOMComponentWithTag(loader, 'img');
-    assert.equal(img.props.src, src, `Expected img to have src ${src}`);
-    assert.equal(img.props.alt, 'alt text', 'Expected img to have alt text');
-    assert.equal(img.props.className, 'test', 'Expected img to have className');
+    assert.include(img.src, src, `Expected img to have src ${src}`);
+    assert.equal(img.alt, 'alt text', 'Expected img to have alt text');
+    assert.equal(img.className, 'test', 'Expected img to have className');
   });
 
   it('removes a previous image when src changes', async function() {
     const domEl = document.createElement('div');
     const loader = await loadImage({src: nocache('tiger.svg')}, null, domEl);
-    assert.match(TestUtils.findRenderedDOMComponentWithTag(loader, 'img').props.src, /tiger\.svg/);
+    assert.match(TestUtils.findRenderedComponentWithType(loader, ImageLoader).props.src, /tiger\.svg/);
 
     // Rerender with a different source.
     loadImage(null, null, domEl).catch(() => {});
@@ -136,13 +137,13 @@ describe('ReactImageLoader', () => {
 
   it('abandons a load when unmounted', done => {
     const domEl = document.createElement('div');
-    const loader = React.render(<ImageLoader
+    const loader = ReactDOM.render(<ImageLoader
       src={nocache('tiger.svg')}
       onLoad={() => { done(new Error('This load should have been abandoned!')); }}
     />, domEl);
 
     // Remove ImageLoader from the DOM.
-    React.render(<div />, domEl, () => {
+    ReactDOM.render(<div />, domEl, () => {
       assert.throws(() => TestUtils.findRenderedDOMComponentWithTag(loader, 'img'));
       done();
     });
@@ -153,7 +154,7 @@ describe('ReactImageLoader', () => {
 
 function loadImage(props, children, el) {
   let render;
-  if (el) render = reactElement => React.render(reactElement, el);
+  if (el) render = reactElement => ReactDOM.render(reactElement, el);
   else render = TestUtils.renderIntoDocument;
 
   return new Promise((resolve, reject) => {

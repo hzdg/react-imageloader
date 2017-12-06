@@ -1,6 +1,5 @@
 import React from 'react';
-
-const {PropTypes} = React;
+import PropTypes from 'prop-types';
 
 const Status = {
   PENDING: 'pending',
