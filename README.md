@@ -1,6 +1,8 @@
 react-imageloader
 =================
 
+Disclaimer: This is not maintained.
+
 One of the hardest things to wrangle in the browser is loading. When images and
 other linked elements appear in the DOM, the browser makes decisions on when to
 load them that sometimes result in problems for a site and its users, such as

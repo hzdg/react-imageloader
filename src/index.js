@@ -9,22 +9,7 @@ const Status = {
   FAILED: 'failed',
 };
 
-
-export default class ImageLoader extends React.Component {
-  static propTypes = {
-    wrapper: PropTypes.func,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    preloader: PropTypes.func,
-    src: PropTypes.string,
-    onLoad: PropTypes.func,
-    onError: PropTypes.func,
-    imgProps: PropTypes.object,
-  };
-
-  static defaultProps = {
-    wrapper: ReactDOM.span,
-  };
+class ImageLoader extends React.Component {
 
   constructor(props) {
     super(props);
@@ -65,8 +50,8 @@ export default class ImageLoader extends React.Component {
     this.destroyLoader();  // We can only have one loader at a time.
 
     this.img = new Image();
-    this.img.onload = ::this.handleLoad;
-    this.img.onerror = ::this.handleError;
+    this.img.onload = this.handleLoad.bind(this);
+    this.img.onerror = this.handleError.bind(this);
     this.img.src = this.props.src;
   }
 
@@ -133,3 +118,20 @@ export default class ImageLoader extends React.Component {
     return this.props.wrapper(...wrapperArgs);
   }
 }
+
+ImageLoader.propTypes = {
+  wrapper: PropTypes.func,
+  className: PropTypes.string,
+  style: PropTypes.object,
+  preloader: PropTypes.func,
+  src: PropTypes.string,
+  onLoad: PropTypes.func,
+  onError: PropTypes.func,
+  imgProps: PropTypes.object,
+};
+
+ImageLoader.defaultProps = {
+  wrapper: ReactDOM.span,
+};
+
+export default ImageLoader;
