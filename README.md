@@ -26,7 +26,7 @@ function preloader() {
 React.render((
   <ImageLoader
     src="/path/to/image.jpg"
-    wrapper={React.DOM.div}
+    wrapper={React.createFactory('div')}
     preloader={preloader}>
     Image load failed!
   </ImageLoader>
@@ -47,7 +47,7 @@ Name        | Type     | Description
 `preloader` | function | An optional function that returns a React element to be shown while the image loads.
 `src`       | string   | The URL of the image to be loaded.
 `style`     | object   | An optional object containing styles for the `wrapper` component.
-`wrapper`   | function | A function that takes a props argument and returns a React element to be used as the wrapper component. Defaults to `React.DOM.span`.
+`wrapper`   | function | A function that takes a props argument and returns a React element to be used as the wrapper component. Defaults to `React.createFactory('span')`.
 
 
 Children
