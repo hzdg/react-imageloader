@@ -81,8 +81,9 @@ export default class ImageLoader extends React.Component {
   }
 
   handleLoad(event) {
+    const { naturalWidth, naturalHeight } = event.target; 
     this.destroyLoader();
-    this.setState({status: Status.LOADED});
+    this.setState({ status: Status.LOADED, width: naturalWidth, height: naturalHeight });
 
     if (this.props.onLoad) this.props.onLoad(event);
   }
@@ -108,8 +109,11 @@ export default class ImageLoader extends React.Component {
   }
 
   render() {
+    const { width, height } = this.state;
     let wrapperProps = {
-      className: this.getClassName(),
+      width,
+      height,
+      className: this.getClassName()
     };
 
     if (this.props.style) {
