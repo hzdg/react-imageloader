@@ -38,15 +38,13 @@
     "mversion": "^1.10.0",
     "node-libs-browser": "^0.5.2",
     "opn": "^2.0.1",
-    "prop-types": "^15.6.0",
-    "react": "^15.6.2",
-    "react-dom": "^15.6.2",
     "webpack": "^1.9.11",
     "webpack-dev-middleware": "^1.0.11",
     "yargs": "^3.11.0"
   },
   "peerDependencies": {
     "react": ">=15 || >=16",
+    "react-dom": ">=15 || >=16",
     "prop-types": ">=15"
   }
 }
